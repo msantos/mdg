@@ -5,7 +5,6 @@ package format
 import (
 	"bytes"
 	"errors"
-	"fmt"
 	"io"
 	"strings"
 
@@ -144,20 +143,20 @@ func (f *Formatter) Diff(md *Markdown) (string, error) {
 	return string(d.ToCombinedFormat()), ErrNotFormatted
 }
 
-func Field(key string, fm map[string]any) string {
+func String(key string, fm map[string]any) string {
 	val, ok := fm[key]
 	if !ok {
 		return ""
 	}
 	switch v := val.(type) {
 	case string:
-		return fmt.Sprintf("%s", v)
+		return v
 	case []interface{}:
 		a := make([]string, 0, len(v))
 		for _, x := range v {
-			a = append(a, fmt.Sprintf("%s", x.(string)))
+			a = append(a, x.(string))
 		}
-		return fmt.Sprintf("%s", strings.Join(a, ", "))
+		return strings.Join(a, ", ")
 	}
 	return ""
 }

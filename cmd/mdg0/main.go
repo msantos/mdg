@@ -122,10 +122,10 @@ func (s *State) convert(file string, d fs.DirEntry, err error) error {
 	}
 
 	metadata := &Metadata{
-		Author:     format.Field("author", md.FrontMatter),
-		Title:      format.Field("title", md.FrontMatter),
-		Version:    format.Field("version", md.FrontMatter),
-		Date:       format.Field("date", md.FrontMatter),
+		Author:     format.String("author", md.FrontMatter),
+		Title:      format.String("title", md.FrontMatter),
+		Version:    format.String("version", md.FrontMatter),
+		Date:       format.String("date", md.FrontMatter),
 		Footer:     format.Map("footer", md.FrontMatter),
 		DefaultCSS: css,
 		Body:       body.String(),
