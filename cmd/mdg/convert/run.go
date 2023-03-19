@@ -15,10 +15,7 @@ import (
 
 type State struct {
 	verbose bool
-	css     string
-
-	md *markdown.Opt
-	t  *template.Template
+	md      *markdown.Opt
 }
 
 func Run() {
