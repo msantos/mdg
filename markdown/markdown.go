@@ -20,11 +20,11 @@ import (
 	"oss.terrastruct.com/d2/d2themes/d2themescatalog"
 )
 
-//go:embed index_tmpl.html
-var indexHTML string
+//go:embed default_tmpl.html
+var defaultHTML string
 
 //go:embed default.css
-var css string
+var defaultCSS string
 
 type Opt struct {
 	goldmark.Markdown
@@ -53,7 +53,7 @@ func WithTemplate(t *template.Template) Option {
 }
 
 func New(opt ...Option) *Opt {
-	t, err := template.New("html").Parse(indexHTML)
+	t, err := template.New("html").Parse(defaultHTML)
 	if err != nil {
 		panic(err)
 	}
@@ -78,7 +78,7 @@ func New(opt ...Option) *Opt {
 			),
 		),
 		t:   t,
-		css: css,
+		css: defaultCSS,
 	}
 
 	for _, fn := range opt {
@@ -117,7 +117,7 @@ func (o *Opt) Convert(content []byte, w io.Writer) error {
 		Version:    format.String("version", md.FrontMatter),
 		Date:       format.String("date", md.FrontMatter),
 		Footer:     format.Map("footer", md.FrontMatter),
-		DefaultCSS: css,
+		DefaultCSS: o.css,
 		Body:       body.String(),
 	}
 
