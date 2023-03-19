@@ -58,7 +58,7 @@ type Metadata struct {
 	Title      string
 	Version    string
 	Date       string
-	Footer     string
+	Footer     map[string]string
 	Styles     []string
 	DefaultCSS string
 	Body       string
@@ -126,6 +126,7 @@ func (s *State) convert(file string, d fs.DirEntry, err error) error {
 		Title:      format.Field("title", md.FrontMatter),
 		Version:    format.Field("version", md.FrontMatter),
 		Date:       format.Field("date", md.FrontMatter),
+		Footer:     format.Map("footer", md.FrontMatter),
 		DefaultCSS: css,
 		Body:       body.String(),
 	}
