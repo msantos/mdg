@@ -4,6 +4,7 @@ import (
 	"bytes"
 	_ "embed"
 	"flag"
+	"fmt"
 	"io/fs"
 	"log"
 	"os"
@@ -78,6 +79,20 @@ func (s *State) newer(md, html string) bool {
 	return stmd.ModTime().After(sthtml.ModTime())
 }
 
+func field(key string, val interface{}) string {
+	switch v := val.(type) {
+	case string:
+		return fmt.Sprintf("%s: %q", key, v)
+	case []interface{}:
+		a := make([]string, 0, len(v))
+		for _, x := range v {
+			a = append(a, fmt.Sprintf("%q", x.(string)))
+		}
+		return fmt.Sprintf("%s: [%s]", key, strings.Join(a, ", "))
+	}
+	return ""
+}
+
 func (s *State) convert(file string, d fs.DirEntry, err error) error {
 	if err != nil {
 		return err
@@ -99,6 +114,8 @@ func (s *State) convert(file string, d fs.DirEntry, err error) error {
 		return nil
 	}
 
+	log.Println("Converting:", file, " -> ", html)
+
 	p, err := os.ReadFile(file)
 	if err != nil {
 		return err
@@ -116,13 +133,12 @@ func (s *State) convert(file string, d fs.DirEntry, err error) error {
 	}
 
 	metadata := &Metadata{
-		// Title:      md.FrontMatter["title"].(string),
-		Title:      "",
+		Title:      field("title", md.FrontMatter),
 		DefaultCSS: css,
 		Body:       body.String(),
 	}
 
-	w, err := os.OpenFile(html, os.O_RDWR|os.O_CREATE, 0755)
+	w, err := os.OpenFile(html, os.O_RDWR|os.O_CREATE, 0644)
 	if err != nil {
 		return err
 	}
