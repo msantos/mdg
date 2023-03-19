@@ -6,7 +6,7 @@ import (
 	"os"
 	"path"
 
-	"git.iscode.ca/msantos/mdg0/cmd/mdg/convert"
+	"git.iscode.ca/msantos/mdg/cmd/mdg/convert"
 )
 
 const (

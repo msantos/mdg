@@ -10,7 +10,7 @@ import (
 	"strings"
 	"text/template"
 
-	"git.iscode.ca/msantos/mdg0/markdown"
+	"git.iscode.ca/msantos/mdg/markdown"
 )
 
 type State struct {

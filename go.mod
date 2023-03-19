@@ -1,4 +1,4 @@
-module git.iscode.ca/msantos/mdg0
+module git.iscode.ca/msantos/mdg
 
 go 1.20
 

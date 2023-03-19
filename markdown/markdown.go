@@ -8,7 +8,7 @@ import (
 
 	"git.iscode.ca/msantos/goldmark-d2"
 	"git.iscode.ca/msantos/goldmark-mermaid"
-	"git.iscode.ca/msantos/mdg0/format"
+	"git.iscode.ca/msantos/mdg/format"
 	"github.com/yuin/goldmark"
 	"github.com/yuin/goldmark-highlighting/v2"
 	meta "github.com/yuin/goldmark-meta"
