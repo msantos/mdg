@@ -55,7 +55,10 @@ func main() {
 }
 
 type Metadata struct {
+	Author     string
 	Title      string
+	Version    string
+	Date       string
 	Styles     []string
 	DefaultCSS string
 	Body       string
@@ -82,13 +85,14 @@ func (s *State) newer(md, html string) bool {
 func field(key string, val interface{}) string {
 	switch v := val.(type) {
 	case string:
-		return fmt.Sprintf("%s: %q", key, v)
+		log.Println(v)
+		return fmt.Sprintf("%s", v)
 	case []interface{}:
 		a := make([]string, 0, len(v))
 		for _, x := range v {
-			a = append(a, fmt.Sprintf("%q", x.(string)))
+			a = append(a, fmt.Sprintf("%s", x.(string)))
 		}
-		return fmt.Sprintf("%s: [%s]", key, strings.Join(a, ", "))
+		return fmt.Sprintf("%s", strings.Join(a, ", "))
 	}
 	return ""
 }
@@ -132,8 +136,13 @@ func (s *State) convert(file string, d fs.DirEntry, err error) error {
 		return err
 	}
 
+	log.Printf("%+v\n", md.FrontMatter)
+
 	metadata := &Metadata{
-		Title:      field("title", md.FrontMatter),
+		Author:     field("author", md.FrontMatter["author"]),
+		Title:      field("title", md.FrontMatter["title"]),
+		Version:    field("version", md.FrontMatter["version"]),
+		Date:       field("date", md.FrontMatter["date"]),
 		DefaultCSS: css,
 		Body:       body.String(),
 	}
