@@ -28,6 +28,7 @@ var defaultCSS string
 
 type Opt struct {
 	goldmark.Markdown
+	f   *format.Formatter
 	css string
 	t   *template.Template
 }
@@ -79,6 +80,7 @@ func New(opt ...Option) *Opt {
 		),
 		t:   t,
 		css: defaultCSS,
+		f:   format.New(format.WithStyle(format.StyleWrap)),
 	}
 
 	for _, fn := range opt {
@@ -122,4 +124,16 @@ func (o *Opt) Convert(content []byte, w io.Writer) error {
 	}
 
 	return o.t.Execute(w, metadata)
+}
+
+func (o *Opt) Format(b []byte) ([]byte, error) {
+	var buf bytes.Buffer
+	md, err := format.Parse("", b)
+	if err != nil {
+		return nil, err
+	}
+	if err := o.f.Format(&buf, md); err != nil {
+		return nil, err
+	}
+	return buf.Bytes(), nil
 }
