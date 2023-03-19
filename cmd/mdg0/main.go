@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bytes"
 	_ "embed"
 	"flag"
 	"io/fs"
@@ -11,24 +10,20 @@ import (
 	"strings"
 	"text/template"
 
-	"git.iscode.ca/msantos/mdg0/format"
 	"git.iscode.ca/msantos/mdg0/markdown"
 )
 
-//go:embed index_tmpl.html
-var indexHTML string
-
-//go:embed default.css
-var css string
-
 type State struct {
 	verbose bool
+	css     string
 
 	md *markdown.Opt
 	t  *template.Template
 }
 
 func main() {
+	css := flag.String("css", "", "CSS")
+	tmpl := flag.String("template", "", "HTML template")
 	verbose := flag.Bool("verbose", false, "Enable debug messages")
 	flag.Parse()
 
@@ -37,31 +32,24 @@ func main() {
 		dir = flag.Arg(0)
 	}
 
-	t, err := template.New("index").Parse(indexHTML)
-	if err != nil {
-		log.Fatalf("template: %v\n", err)
+	var t *template.Template
+	var err error
+
+	if *tmpl != "" {
+		t, err = template.New("index").Parse(*tmpl)
+		if err != nil {
+			log.Fatalf("template: %v\n", err)
+		}
 	}
 
 	s := &State{
-		md:      markdown.New(),
+		md:      markdown.New(markdown.WithTemplate(t), markdown.WithCSS(*css)),
 		verbose: *verbose,
-		t:       t,
 	}
 
 	if err := s.run(dir); err != nil {
 		log.Fatalln(err)
 	}
-}
-
-type Metadata struct {
-	Author     string
-	Title      string
-	Version    string
-	Date       string
-	Footer     map[string]string
-	Styles     []string
-	DefaultCSS string
-	Body       string
 }
 
 func (s *State) run(dir string) error {
@@ -110,27 +98,6 @@ func (s *State) convert(file string, d fs.DirEntry, err error) error {
 		return err
 	}
 
-	md, err := format.Parse(file, p)
-	if err != nil {
-		return err
-	}
-
-	var body bytes.Buffer
-
-	if err := s.md.Convert(md.Content, &body); err != nil {
-		return err
-	}
-
-	metadata := &Metadata{
-		Author:     format.String("author", md.FrontMatter),
-		Title:      format.String("title", md.FrontMatter),
-		Version:    format.String("version", md.FrontMatter),
-		Date:       format.String("date", md.FrontMatter),
-		Footer:     format.Map("footer", md.FrontMatter),
-		DefaultCSS: css,
-		Body:       body.String(),
-	}
-
 	w, err := os.OpenFile(html, os.O_RDWR|os.O_CREATE, 0644)
 	if err != nil {
 		return err
@@ -142,5 +109,5 @@ func (s *State) convert(file string, d fs.DirEntry, err error) error {
 		}
 	}()
 
-	return s.t.Execute(w, metadata)
+	return s.md.Convert(p, w)
 }
