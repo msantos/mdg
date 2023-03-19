@@ -5,7 +5,9 @@ package format
 import (
 	"bytes"
 	"errors"
+	"fmt"
 	"io"
+	"strings"
 
 	"github.com/Kunde21/markdownfmt/v2/markdown"
 	"github.com/bwplotka/mdox/pkg/gitdiff"
@@ -140,4 +142,22 @@ func (f *Formatter) Diff(md *Markdown) (string, error) {
 	)
 
 	return string(d.ToCombinedFormat()), ErrNotFormatted
+}
+
+func Field(key string, fm map[string]any) string {
+	val, ok := fm[key]
+	if !ok {
+		return ""
+	}
+	switch v := val.(type) {
+	case string:
+		return fmt.Sprintf("%s", v)
+	case []interface{}:
+		a := make([]string, 0, len(v))
+		for _, x := range v {
+			a = append(a, fmt.Sprintf("%s", x.(string)))
+		}
+		return fmt.Sprintf("%s", strings.Join(a, ", "))
+	}
+	return ""
 }
