@@ -47,18 +47,31 @@ func Run() {
 		dir = flag.Arg(0)
 	}
 
+	cssContent := ""
+	if *css != "" {
+		b, err := os.ReadFile(*css)
+		if err != nil {
+			log.Fatalf("css: %v\n", err)
+		}
+		cssContent = string(b)
+	}
+
 	var t *template.Template
-	var err error
 
 	if *tmpl != "" {
-		t, err = template.New("index").Parse(*tmpl)
+		b, err := os.ReadFile(*tmpl)
+		if err != nil {
+			log.Fatalf("template: %v\n", err)
+		}
+
+		t, err = template.New("index").Parse(string(b))
 		if err != nil {
 			log.Fatalf("template: %v\n", err)
 		}
 	}
 
 	s := &State{
-		md:      markdown.New(markdown.WithTemplate(t), markdown.WithCSS(*css)),
+		md:      markdown.New(markdown.WithTemplate(t), markdown.WithCSS(cssContent)),
 		verbose: *verbose,
 	}
 
