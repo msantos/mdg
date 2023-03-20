@@ -4,6 +4,7 @@ import (
 	_ "embed"
 	"flag"
 	"fmt"
+	"io"
 	"io/fs"
 	"log"
 	"os"
@@ -67,7 +68,18 @@ func Run() {
 }
 
 func (s *State) run(dir string) error {
+	if dir == "-" {
+		return s.stdin()
+	}
 	return filepath.WalkDir(dir, s.convert)
+}
+
+func (s *State) stdin() error {
+	p, err := io.ReadAll(os.Stdin)
+	if err != nil {
+		return err
+	}
+	return s.md.Convert(p, os.Stdout)
 }
 
 func (s *State) newer(md, html string) bool {
