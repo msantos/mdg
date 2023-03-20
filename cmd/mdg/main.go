@@ -7,10 +7,7 @@ import (
 	"path"
 
 	"git.iscode.ca/msantos/mdg/cmd/mdg/convert"
-)
-
-const (
-	version = "0.1.0"
+	"git.iscode.ca/msantos/mdg/config"
 )
 
 var f = flag.NewFlagSet(os.Args[0], flag.ExitOnError)
@@ -27,7 +24,7 @@ Commands:
       fmt      - format markdown
       version  - display version
 
-`, path.Base(os.Args[0]), version, os.Args[0])
+`, path.Base(os.Args[0]), config.Version(), os.Args[0])
 	fmt.Fprintf(os.Stderr, "Options:\n\n")
 	f.PrintDefaults()
 }
@@ -60,7 +57,7 @@ func main() {
 	case "help":
 		usage()
 	case "version":
-		fmt.Println(version)
+		fmt.Println(config.Version())
 	default:
 		fmt.Println("command not found:", command)
 		os.Exit(127)

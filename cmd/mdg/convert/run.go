@@ -3,13 +3,16 @@ package convert
 import (
 	_ "embed"
 	"flag"
+	"fmt"
 	"io/fs"
 	"log"
 	"os"
+	"path"
 	"path/filepath"
 	"strings"
 	"text/template"
 
+	"git.iscode.ca/msantos/mdg/config"
 	"git.iscode.ca/msantos/mdg/markdown"
 )
 
@@ -18,10 +21,24 @@ type State struct {
 	md      *markdown.Opt
 }
 
+func usage() {
+	fmt.Fprintf(os.Stderr, `%s v%s
+Usage: %s convert [<option>] [-|<path>]
+
+Convert markdown to HTML.
+
+`, path.Base(os.Args[0]), config.Version(), os.Args[0])
+	fmt.Fprintf(os.Stderr, "Options:\n\n")
+	flag.PrintDefaults()
+}
+
 func Run() {
 	css := flag.String("css", "", "CSS")
 	tmpl := flag.String("template", "", "HTML template")
 	verbose := flag.Bool("verbose", false, "Enable debug messages")
+
+	flag.Usage = func() { usage() }
+
 	flag.Parse()
 
 	dir := "."
