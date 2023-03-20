@@ -22,7 +22,7 @@ type State struct {
 }
 
 func usage() {
-	fmt.Fprintf(os.Stderr, `%s v%s
+	fmt.Fprintf(os.Stderr, `%s %s
 Usage: %s convert [<option>] [-|<path>]
 
 Convert markdown to HTML.

@@ -24,7 +24,7 @@ func Version() string {
 	}
 	for _, k := range buildInfo.Settings {
 		if k.Key == "vcs.revision" {
-			return k.Value
+			return "(" + k.Value + ")"
 		}
 	}
 	return buildInfo.Main.Version

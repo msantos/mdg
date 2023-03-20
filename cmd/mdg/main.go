@@ -13,7 +13,7 @@ import (
 var f = flag.NewFlagSet(os.Args[0], flag.ExitOnError)
 
 func usage() {
-	fmt.Fprintf(os.Stderr, `%s v%s
+	fmt.Fprintf(os.Stderr, `%s %s
 Usage: %s <command> [<option>]
 
 Convert and format markdown.
