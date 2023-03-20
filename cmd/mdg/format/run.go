@@ -91,7 +91,7 @@ func (s *State) format(file string, d fs.DirEntry, err error) error {
 		return err
 	}
 
-	w, err := os.OpenFile(file, os.O_RDWR, 0644)
+	w, err := os.CreateTemp(filepath.Dir(file), filepath.Base(file))
 	if err != nil {
 		return err
 	}
@@ -100,7 +100,21 @@ func (s *State) format(file string, d fs.DirEntry, err error) error {
 		if err := w.Close(); err != nil {
 			log.Println(err)
 		}
+
+		if err != nil {
+			if err := os.Remove(w.Name()); err != nil {
+				log.Println(err)
+			}
+		}
 	}()
 
-	return s.md.Format(p, w)
+	if err := s.md.Format(p, w); err != nil {
+		return err
+	}
+
+	if err := w.Sync(); err != nil {
+		return err
+	}
+
+	return os.Rename(w.Name(), file)
 }
