@@ -60,7 +60,7 @@ h1 .text-muted {
 h2 {
 	clear: right;
 	font-size: 1.25rem;
-	background: #e0ebf5;
+	background: #F5F6F9;
 	padding: 0.5rem;
 	line-height: 1.25;
 	font-weight: normal;
@@ -108,7 +108,7 @@ dd {
  */
 
 .topbar {
-	background: #e0ebf5;
+	background: #E7E9EE;
 	height: 4rem;
 	overflow: hidden;
 }
