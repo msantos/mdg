@@ -126,14 +126,10 @@ func (o *Opt) Convert(content []byte, w io.Writer) error {
 	return o.t.Execute(w, metadata)
 }
 
-func (o *Opt) Format(b []byte) ([]byte, error) {
-	var buf bytes.Buffer
-	md, err := format.Parse("", b)
+func (o *Opt) Format(content []byte, w io.Writer) error {
+	md, err := format.Parse("", content)
 	if err != nil {
-		return nil, err
+		return err
 	}
-	if err := o.f.Format(&buf, md); err != nil {
-		return nil, err
-	}
-	return buf.Bytes(), nil
+	return o.f.Format(w, md)
 }

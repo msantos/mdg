@@ -7,6 +7,7 @@ import (
 	"path"
 
 	"git.iscode.ca/msantos/mdg/cmd/mdg/convert"
+	"git.iscode.ca/msantos/mdg/cmd/mdg/format"
 	"git.iscode.ca/msantos/mdg/config"
 )
 
@@ -54,6 +55,7 @@ func main() {
 	case "format":
 		fallthrough
 	case "fmt":
+		format.Run()
 	case "help":
 		usage()
 	case "version":
