@@ -1,6 +1,7 @@
 package format
 
 import (
+	"bytes"
 	_ "embed"
 	"flag"
 	"fmt"
@@ -84,12 +85,22 @@ func (s *State) format(file string, d fs.DirEntry, err error) error {
 		return nil
 	}
 
-	log.Println("Formatting:", file)
-
 	p, err := os.ReadFile(file)
 	if err != nil {
 		return err
 	}
+
+	var buf bytes.Buffer
+
+	if err := s.md.Format(p, &buf); err != nil {
+		return err
+	}
+
+	if bytes.Equal(p, buf.Bytes()) {
+		return nil
+	}
+
+	log.Println("Formatting:", file)
 
 	w, err := os.CreateTemp(filepath.Dir(file), filepath.Base(file))
 	if err != nil {
@@ -108,7 +119,7 @@ func (s *State) format(file string, d fs.DirEntry, err error) error {
 		}
 	}()
 
-	if err := s.md.Format(p, w); err != nil {
+	if _, err := w.Write(buf.Bytes()); err != nil {
 		return err
 	}
 
