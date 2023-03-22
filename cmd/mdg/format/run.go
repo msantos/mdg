@@ -15,9 +15,11 @@ import (
 
 	"git.iscode.ca/msantos/mdg/config"
 	"git.iscode.ca/msantos/mdg/markdown"
+	"github.com/bwplotka/mdox/pkg/gitdiff"
 )
 
 type State struct {
+	diff    bool
 	verbose bool
 	md      *markdown.Opt
 }
@@ -34,6 +36,7 @@ Convert markdown to HTML.
 }
 
 func Run() {
+	diff := flag.Bool("diff", false, "Display diff")
 	verbose := flag.Bool("verbose", false, "Enable debug messages")
 
 	flag.Usage = func() { usage() }
@@ -47,6 +50,7 @@ func Run() {
 
 	s := &State{
 		md:      markdown.New(),
+		diff:    *diff,
 		verbose: *verbose,
 	}
 
@@ -66,6 +70,24 @@ func (s *State) stdin() error {
 	p, err := io.ReadAll(os.Stdin)
 	if err != nil {
 		return err
+	}
+	if s.diff {
+		var buf bytes.Buffer
+
+		if err := s.md.Format(p, &buf); err != nil {
+			return err
+		}
+
+		if bytes.Equal(p, buf.Bytes()) {
+			return nil
+		}
+
+		d := gitdiff.CompareBytes(
+			p, "stdin",
+			buf.Bytes(), "stdin (formatted)",
+		)
+		fmt.Println(string(d.ToCombinedFormat()))
+		return nil
 	}
 	return s.md.Format(p, os.Stdout)
 }
@@ -97,6 +119,16 @@ func (s *State) format(file string, d fs.DirEntry, err error) error {
 	}
 
 	if bytes.Equal(p, buf.Bytes()) {
+		return nil
+	}
+
+	if s.diff {
+		d := gitdiff.CompareBytes(
+			p, file,
+			buf.Bytes(), file+" (formatted)",
+		)
+
+		fmt.Println(string(d.ToCombinedFormat()))
 		return nil
 	}
 
