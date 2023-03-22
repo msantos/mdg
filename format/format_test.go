@@ -79,6 +79,34 @@ option
 )
 
 func TestFormatMarkdown(t *testing.T) {
+	md, err := format.Parse("test", []byte(mdUnformatted))
+	if err != nil {
+		t.Errorf("%v", err)
+		return
+	}
+
+	style, err := format.FromString("wrap")
+	if err != nil {
+		t.Errorf("%v", err)
+		return
+	}
+
+	f := format.New(format.WithStyle(style))
+
+	b := &bytes.Buffer{}
+
+	if err := f.Format(b, md); err != nil {
+		t.Errorf("%v", err)
+		return
+	}
+
+	if !bytes.Equal([]byte(mdFormatted), b.Bytes()) {
+		t.Errorf("markdown unformatted")
+		return
+	}
+}
+
+func TestFormatMarkdownFrontmatter(t *testing.T) {
 	md, err := format.Parse("test", []byte(mdFrontMatterUnformatted))
 	if err != nil {
 		t.Errorf("%v", err)
