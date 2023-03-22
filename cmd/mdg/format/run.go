@@ -28,7 +28,7 @@ func usage() {
 	fmt.Fprintf(os.Stderr, `%s %s
 Usage: %s format [<option>] [-|<path>]
 
-Convert markdown to HTML.
+Format markdown documents.
 
 `, path.Base(os.Args[0]), config.Version(), os.Args[0])
 	fmt.Fprintf(os.Stderr, "Options:\n\n")
@@ -36,7 +36,7 @@ Convert markdown to HTML.
 }
 
 func Run() {
-	diff := flag.Bool("diff", false, "Display diff")
+	diff := flag.Bool("diff", false, "Display formatting changes as diff")
 	verbose := flag.Bool("verbose", false, "Enable debug messages")
 
 	flag.Usage = func() { usage() }

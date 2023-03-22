@@ -1,49 +1,63 @@
 # SYNOPSIS
 
-iscode [*options*] [*address*]:*port*
+mdg [*options*] [*command*] [-|*directory*]
 
 # DESCRIPTION
 
-iscode is the https://iscode.ca web service.
+mdg generates other formats from markdown. By default, mdg walks the
+current directory for any files ending with the `.md` extension.
+
+Specify `-` to read markdown from stdin or a path to read from another
+directory.
 
 # BUILDING
 
 ```
-go install git.iscode.ca/iscode.ca/iscode/cmd/iscode@latest
+go install git.iscode.ca/msantos/mgd/cmd/mgd@latest
 ```
 
 # EXAMPLES
 
 ```
-iscode :8080
+# current directory
+mdg convert
 
-iscode --lib=d2 :8080
+# any markdown in the $HOME/docs directory
+mdg convert ~/docs
+
+# format from stdin
+mdg fmt -
 ```
 
 # ENVIRONMENT VARIABLES
 
-RESUME_FILE
-: the default resume.json input
+None.
 
-RESUME_USER
-: the API user
+# COMMANDS
 
-RESUME_CACHEDIR
-: set the cache directory (default `$HOME/.cache`)
+## convert
 
-# OPTIONS
+Convert markdown documents to HTML.
 
-lib *string*
-: Default diagram library: mermaid, d2 (default `mermaid`)
+### OPTIONS
 
-proxyproto
-: Enable proxy protocol
+css *string*
+: CSS file
 
-resume string
-: path to resume.json file (default `resume.json`)
+template *string*
+: HTML template
 
-timeout duration
-: Read timeout (default `5s`)
+verbose
+: Enable debug messages
+
+## format
+
+Format markdown documents.
+
+### OPTIONS
+
+diff
+: Display formatting changes as diff
 
 verbose
 : Enable debug messages

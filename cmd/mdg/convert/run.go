@@ -26,7 +26,7 @@ func usage() {
 	fmt.Fprintf(os.Stderr, `%s %s
 Usage: %s convert [<option>] [-|<path>]
 
-Convert markdown to HTML.
+Convert markdown documents to HTML.
 
 `, path.Base(os.Args[0]), config.Version(), os.Args[0])
 	fmt.Fprintf(os.Stderr, "Options:\n\n")
@@ -34,7 +34,7 @@ Convert markdown to HTML.
 }
 
 func Run() {
-	css := flag.String("css", "", "CSS")
+	css := flag.String("css", "", "CSS file")
 	tmpl := flag.String("template", "", "HTML template")
 	verbose := flag.Bool("verbose", false, "Enable debug messages")
 
