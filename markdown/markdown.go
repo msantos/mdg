@@ -96,6 +96,7 @@ type Metadata struct {
 	Title      string
 	Creator    string
 	Version    string
+	VCS        string
 	Date       string
 	Footer     map[string]string
 	Styles     []string
@@ -128,6 +129,7 @@ func (o *Opt) Convert(content []byte, w io.Writer) error {
 		Title:      format.String("title", md.FrontMatter),
 		Creator:    metadata("creator", md.FrontMatter, config.Name()),
 		Version:    metadata("version", md.FrontMatter, config.Version()),
+		VCS:        metadata("vcs", md.FrontMatter, config.Repo()),
 		Date:       format.String("date", md.FrontMatter),
 		Footer:     format.Map("footer", md.FrontMatter),
 		DefaultCSS: o.css,

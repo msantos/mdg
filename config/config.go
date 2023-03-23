@@ -29,3 +29,12 @@ func Version() string {
 	}
 	return buildInfo.Main.Version
 }
+
+// Repo returns the repository path.
+func Repo() string {
+	buildInfo, ok := debug.ReadBuildInfo()
+	if !ok {
+		return ""
+	}
+	return buildInfo.Main.Path
+}
