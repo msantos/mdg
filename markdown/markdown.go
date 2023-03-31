@@ -8,6 +8,7 @@ import (
 
 	"git.iscode.ca/msantos/goldmark-d2"
 	"git.iscode.ca/msantos/goldmark-mermaid"
+	"git.iscode.ca/msantos/mdg/config"
 	"git.iscode.ca/msantos/mdg/format"
 	"github.com/yuin/goldmark"
 	"github.com/yuin/goldmark-highlighting/v2"
@@ -93,12 +94,22 @@ func New(opt ...Option) *Opt {
 type Metadata struct {
 	Author     string
 	Title      string
+	Creator    string
 	Version    string
+	VCS        string
 	Date       string
 	Footer     map[string]string
 	Styles     []string
 	DefaultCSS string
 	Body       string
+}
+
+func metadata(key string, fm map[string]any, def string) string {
+	s := format.String(key, fm)
+	if s == "" {
+		return def
+	}
+	return s
 }
 
 func (o *Opt) Convert(content []byte, w io.Writer) error {
@@ -116,7 +127,9 @@ func (o *Opt) Convert(content []byte, w io.Writer) error {
 	metadata := &Metadata{
 		Author:     format.String("author", md.FrontMatter),
 		Title:      format.String("title", md.FrontMatter),
-		Version:    format.String("version", md.FrontMatter),
+		Creator:    metadata("creator", md.FrontMatter, config.Name()),
+		Version:    metadata("version", md.FrontMatter, config.Version()),
+		VCS:        metadata("vcs", md.FrontMatter, config.Repo()),
 		Date:       format.String("date", md.FrontMatter),
 		Footer:     format.Map("footer", md.FrontMatter),
 		DefaultCSS: o.css,
