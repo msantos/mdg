@@ -52,8 +52,8 @@ contrib.go.opencensus.io/exporter/stackdriver v0.11.0/go.mod h1:hA7rlmtavV03FGxz
 contrib.go.opencensus.io/integrations/ocsql v0.1.4/go.mod h1:8DsSdjz3F+APR+0z0WkU1aRorQCFfRxvqjUUPMbF3fE=
 contrib.go.opencensus.io/resource v0.0.0-20190131005048-21591786a5e0/go.mod h1:F361eGI91LCmW1I/Saf+rX0+OFcigGlFvXwEGEnkRLA=
 dmitri.shuralyov.com/gpu/mtl v0.0.0-20190408044501-666a987793e9/go.mod h1:H6x//7gZCb22OMCxBHrMx7a5I7Hp++hsVxbQ4BYO7hU=
-git.iscode.ca/msantos/goldmark-d2 v0.0.0-20230319160249-35253557166a h1:IZRKA4usmNYNcnQNAWRIKJh8wep3wLgGLZvTfdQEeqY=
-git.iscode.ca/msantos/goldmark-d2 v0.0.0-20230319160249-35253557166a/go.mod h1:BzPEHa2kmEDWx24L0g7s4XaYzjU+ifWqZtpLkcdaxbk=
+git.iscode.ca/msantos/goldmark-d2 v0.0.0-20230331012113-a875450e6e17 h1:9WSELdeQzZXzJMn/nsh2tOIXUvRwIHd99FE8d9rya6E=
+git.iscode.ca/msantos/goldmark-d2 v0.0.0-20230331012113-a875450e6e17/go.mod h1:RD3/iHZbPvtvsjP9TqN4/ZYjk8osyD1jDpPLbcjR7EA=
 git.iscode.ca/msantos/goldmark-mermaid v0.0.0-20230319160057-12c3b26ba323 h1:Py8BtKNpLnPFhOROPO9xgbREOk/UDNRRyqyBARk8w9U=
 git.iscode.ca/msantos/goldmark-mermaid v0.0.0-20230319160057-12c3b26ba323/go.mod h1:aN+deC+lILW3TwjlhnYZxpA8VZF6p/+5eYa+OhjQ6ts=
 git.nbspsmanagedservices.com/msantos/mdfmt v0.0.0-20230316195158-a7f8f277ac84 h1:V9g12SVKhscjVH5rzJq56PCpIcRwkKX0tCZBDvOni2s=
