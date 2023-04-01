@@ -103,6 +103,23 @@ dd {
 	font-size: 0.875rem;
 }
 
+table {
+  border-collapse: collapse;
+}
+
+thead {
+  background-color: #E7E9EE;
+}
+
+th, td {
+  border: 1px solid black;
+  padding: 8px;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #F5F6F9;
+}
+
 /**
  * Custom classes for pages
  */
