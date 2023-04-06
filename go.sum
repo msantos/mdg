@@ -56,8 +56,6 @@ git.iscode.ca/msantos/goldmark-d2 v0.0.0-20230331012113-a875450e6e17 h1:9WSELdeQ
 git.iscode.ca/msantos/goldmark-d2 v0.0.0-20230331012113-a875450e6e17/go.mod h1:RD3/iHZbPvtvsjP9TqN4/ZYjk8osyD1jDpPLbcjR7EA=
 git.iscode.ca/msantos/goldmark-mermaid v0.0.0-20230319160057-12c3b26ba323 h1:Py8BtKNpLnPFhOROPO9xgbREOk/UDNRRyqyBARk8w9U=
 git.iscode.ca/msantos/goldmark-mermaid v0.0.0-20230319160057-12c3b26ba323/go.mod h1:aN+deC+lILW3TwjlhnYZxpA8VZF6p/+5eYa+OhjQ6ts=
-git.nbspsmanagedservices.com/msantos/mdfmt v0.0.0-20230316195158-a7f8f277ac84 h1:V9g12SVKhscjVH5rzJq56PCpIcRwkKX0tCZBDvOni2s=
-git.nbspsmanagedservices.com/msantos/mdfmt v0.0.0-20230316195158-a7f8f277ac84/go.mod h1:L+YLX4I7SzdZNAo4/Ms/Or6w1AWXXptunXeoNGaB9QY=
 git.sr.ht/~sbinet/gg v0.3.1 h1:LNhjNn8DerC8f9DHLz6lS0YYul/b602DUxDgGkd/Aik=
 github.com/Azure/azure-amqp-common-go v1.1.3/go.mod h1:FhZtXirFANw40UXI2ntweO+VOkfaw8s6vZxUiRhLYW8=
 github.com/Azure/azure-amqp-common-go v1.1.4/go.mod h1:FhZtXirFANw40UXI2ntweO+VOkfaw8s6vZxUiRhLYW8=

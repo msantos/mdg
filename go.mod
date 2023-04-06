@@ -5,7 +5,6 @@ go 1.20
 require (
 	git.iscode.ca/msantos/goldmark-d2 v0.0.0-20230331012113-a875450e6e17
 	git.iscode.ca/msantos/goldmark-mermaid v0.0.0-20230319160057-12c3b26ba323
-	git.nbspsmanagedservices.com/msantos/mdfmt v0.0.0-20230316195158-a7f8f277ac84
 	github.com/Kunde21/markdownfmt/v2 v2.1.1-0.20210810103848-727f02f4c51c
 	github.com/bwplotka/mdox v0.9.0
 	github.com/gohugoio/hugo v0.111.3
