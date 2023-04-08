@@ -4,11 +4,17 @@ mdg [*options*] [*command*] [-|*directory*]
 
 # DESCRIPTION
 
-mdg generates other formats from markdown. By default, mdg walks the
-current directory for any files ending with the `.md` extension.
+mdg generates html and formatted markdown from markdown input.
 
-Specify `-` to read markdown from stdin or a path to read from another
-directory.
+mdg accepts an optional argument:
+
+* no argument: mdg walks the current directory for any files ending with
+  the `.md` extension
+
+* path: mdg walks the specified path for any files ending with the
+  `.md` extension
+
+* `-`: read markdown from stdin
 
 # BUILDING
 
