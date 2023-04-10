@@ -6,12 +6,12 @@ import (
 	"io"
 	"text/template"
 
-	"git.iscode.ca/msantos/goldmark-d2"
-	"git.iscode.ca/msantos/goldmark-mermaid"
+	d2 "git.iscode.ca/msantos/goldmark-d2"
+	mermaid "git.iscode.ca/msantos/goldmark-mermaid"
 	"git.iscode.ca/msantos/mdg/config"
 	"git.iscode.ca/msantos/mdg/format"
 	"github.com/yuin/goldmark"
-	"github.com/yuin/goldmark-highlighting/v2"
+	highlighting "github.com/yuin/goldmark-highlighting/v2"
 	meta "github.com/yuin/goldmark-meta"
 	"github.com/yuin/goldmark/extension"
 	"github.com/yuin/goldmark/parser"
@@ -23,9 +23,18 @@ import (
 
 //go:embed default_tmpl.html
 var defaultHTML string
+var templateHTML *template.Template
 
 //go:embed default.css
 var defaultCSS string
+
+func init() {
+	t, err := template.New("html").Parse(defaultHTML)
+	if err != nil {
+		panic(err)
+	}
+	templateHTML = t
+}
 
 type Opt struct {
 	goldmark.Markdown
@@ -55,11 +64,6 @@ func WithTemplate(t *template.Template) Option {
 }
 
 func New(opt ...Option) *Opt {
-	t, err := template.New("html").Parse(defaultHTML)
-	if err != nil {
-		panic(err)
-	}
-
 	o := &Opt{
 		Markdown: goldmark.New(
 			goldmark.WithParserOptions(parser.WithAutoHeadingID()),
@@ -79,7 +83,7 @@ func New(opt ...Option) *Opt {
 				},
 			),
 		),
-		t:   t,
+		t:   templateHTML,
 		css: defaultCSS,
 		f:   format.New(format.WithStyle(format.StyleWrap)),
 	}
