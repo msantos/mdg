@@ -27,7 +27,6 @@ Commands:
       version  - display version
 
 `, path.Base(os.Args[0]), config.Version(), os.Args[0])
-	fmt.Fprintf(os.Stderr, "Options:\n\n")
 	f.PrintDefaults()
 }
 
