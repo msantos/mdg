@@ -31,7 +31,7 @@ jobs:
       - name: Install and run golangci
         run: |
           curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.53.2
-          golangci-lint run --timeout 2m0s
+          golangci-lint run --timeout 4m0s
       - name: Run tests
         run: |
           go test ./...
