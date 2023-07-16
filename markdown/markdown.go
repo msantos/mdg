@@ -79,7 +79,6 @@ func New(opt ...Option) *Opt {
 				&d2.Extender{
 					Layout:  d2elklayout.DefaultLayout,
 					ThemeID: d2themescatalog.TerminalGrayscale.ID,
-					Sketch:  true,
 				},
 			),
 		),
