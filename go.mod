@@ -3,7 +3,7 @@ module git.iscode.ca/msantos/mdg
 go 1.20
 
 require (
-	git.iscode.ca/msantos/goldmark-d2 v0.0.0-20231009182936-dfb4a7adb635
+	git.iscode.ca/msantos/goldmark-d2 v0.0.0-20231009211131-b51b138ace4f
 	git.iscode.ca/msantos/goldmark-mermaid v0.0.0-20230319160057-12c3b26ba323
 	github.com/Kunde21/markdownfmt/v2 v2.1.1-0.20210810103848-727f02f4c51c
 	github.com/bwplotka/mdox v0.9.0
