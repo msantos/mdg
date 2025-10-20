@@ -1,66 +1,59 @@
 module git.iscode.ca/msantos/mdg
 
-go 1.20
+go 1.24.0
 
 require (
-	git.iscode.ca/msantos/goldmark-d2 v0.0.0-20231009211131-b51b138ace4f
-	git.iscode.ca/msantos/goldmark-mermaid v0.0.0-20230319160057-12c3b26ba323
+	git.iscode.ca/msantos/goldmark-d2 v0.0.0-20250316162625-110105d97ed9
+	git.iscode.ca/msantos/goldmark-mermaid v0.0.0-20250316162732-7365edc2242d
 	github.com/Kunde21/markdownfmt/v2 v2.1.1-0.20210810103848-727f02f4c51c
 	github.com/bwplotka/mdox v0.9.0
-	github.com/gohugoio/hugo v0.119.0
-	github.com/yuin/goldmark v1.5.6
+	github.com/gohugoio/hugo v0.151.2
+	github.com/yuin/goldmark v1.7.13
 	github.com/yuin/goldmark-highlighting/v2 v2.0.0-20230729083705-37449abec8cc
 	github.com/yuin/goldmark-meta v1.1.0
-	go.abhg.dev/goldmark/anchor v0.1.1
-	go.abhg.dev/goldmark/toc v0.7.0
+	go.abhg.dev/goldmark/anchor v0.2.0
+	go.abhg.dev/goldmark/toc v0.12.0
 	gopkg.in/yaml.v3 v3.0.1
-	oss.terrastruct.com/d2 v0.6.1
+	oss.terrastruct.com/d2 v0.7.1
 )
 
 require (
-	cdr.dev/slog v1.4.2 // indirect
-	cloud.google.com/go/logging v1.8.1 // indirect
-	github.com/PuerkitoBio/goquery v1.8.1 // indirect
-	github.com/alecthomas/chroma v0.10.0 // indirect
-	github.com/alecthomas/chroma/v2 v2.9.1 // indirect
-	github.com/andybalholm/cascadia v1.3.2 // indirect
-	github.com/bep/godartsass v1.2.0 // indirect
-	github.com/bep/godartsass/v2 v2.0.0 // indirect
-	github.com/bep/golibsass v1.1.1 // indirect
+	github.com/PuerkitoBio/goquery v1.10.3 // indirect
+	github.com/alecthomas/chroma/v2 v2.20.0 // indirect
+	github.com/andybalholm/brotli v1.2.0 // indirect
+	github.com/andybalholm/cascadia v1.3.3 // indirect
+	github.com/bep/godartsass/v2 v2.5.0 // indirect
+	github.com/bep/golibsass v1.2.0 // indirect
+	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/clbanning/mxj/v2 v2.7.0 // indirect
-	github.com/cli/safeexec v1.0.1 // indirect
-	github.com/dlclark/regexp2 v1.10.0 // indirect
-	github.com/dop251/goja v0.0.0-20230919151941-fc55792775de // indirect
-	github.com/fatih/color v1.15.0 // indirect
-	github.com/go-sourcemap/sourcemap v2.1.3+incompatible // indirect
+	github.com/clipperhouse/uax29/v2 v2.2.0 // indirect
+	github.com/dlclark/regexp2 v1.11.5 // indirect
+	github.com/dop251/goja v0.0.0-20251008123653-cf18d89f3cf6 // indirect
+	github.com/go-sourcemap/sourcemap v2.1.4+incompatible // indirect
 	github.com/gobwas/glob v0.2.3 // indirect
+	github.com/gohugoio/hashstructure v0.6.0 // indirect
 	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0 // indirect
-	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
-	github.com/google/pprof v0.0.0-20230926050212-f7f687d19a98 // indirect
-	github.com/lucasb-eyer/go-colorful v1.2.0 // indirect
-	github.com/mattn/go-colorable v0.1.13 // indirect
-	github.com/mattn/go-isatty v0.0.19 // indirect
-	github.com/mattn/go-runewidth v0.0.15 // indirect
-	github.com/mazznoer/csscolorparser v0.1.3 // indirect
-	github.com/niklasfasching/go-org v1.7.0 // indirect
-	github.com/pelletier/go-toml/v2 v2.1.0 // indirect
+	github.com/google/pprof v0.0.0-20251007162407-5df77e3f7d1d // indirect
+	github.com/lucasb-eyer/go-colorful v1.3.0 // indirect
+	github.com/mattn/go-colorable v0.1.14 // indirect
+	github.com/mattn/go-isatty v0.0.20 // indirect
+	github.com/mattn/go-runewidth v0.0.19 // indirect
+	github.com/mazznoer/csscolorparser v0.1.6 // indirect
+	github.com/niklasfasching/go-org v1.9.1 // indirect
+	github.com/pelletier/go-toml/v2 v2.2.4 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
-	github.com/rivo/uniseg v0.4.4 // indirect
-	github.com/sergi/go-diff v1.3.1 // indirect
-	github.com/spf13/afero v1.10.0 // indirect
-	github.com/spf13/cast v1.5.1 // indirect
-	github.com/tdewolff/parse/v2 v2.6.8 // indirect
-	go.opencensus.io v0.24.0 // indirect
-	golang.org/x/crypto v0.14.0 // indirect
-	golang.org/x/exp v0.0.0-20231006140011-7918f672742d // indirect
-	golang.org/x/image v0.13.0 // indirect
-	golang.org/x/net v0.16.0 // indirect
-	golang.org/x/sys v0.13.0 // indirect
-	golang.org/x/term v0.13.0 // indirect
-	golang.org/x/text v0.13.0 // indirect
-	golang.org/x/xerrors v0.0.0-20220907171357-04be3eba64a2 // indirect
-	gonum.org/v1/plot v0.14.0 // indirect
-	google.golang.org/protobuf v1.31.0 // indirect
+	github.com/rivo/uniseg v0.4.7 // indirect
+	github.com/sergi/go-diff v1.4.0 // indirect
+	github.com/spf13/afero v1.15.0 // indirect
+	github.com/spf13/cast v1.10.0 // indirect
+	github.com/tdewolff/parse/v2 v2.8.4 // indirect
+	golang.org/x/exp v0.0.0-20251017212417-90e834f514db // indirect
+	golang.org/x/image v0.32.0 // indirect
+	golang.org/x/net v0.46.0 // indirect
+	golang.org/x/sys v0.37.0 // indirect
+	golang.org/x/text v0.30.0 // indirect
+	golang.org/x/xerrors v0.0.0-20240903120638-7835f813f4da // indirect
+	google.golang.org/protobuf v1.36.10 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
-	oss.terrastruct.com/util-go v0.0.0-20230604222829-11c3c60fec14 // indirect
+	oss.terrastruct.com/util-go v0.0.0-20250213174338-243d8661088a // indirect
 )
