@@ -6,7 +6,6 @@ import (
 	"io"
 	"text/template"
 
-	mermaid "git.iscode.ca/msantos/goldmark-mermaid"
 	"git.iscode.ca/msantos/mdg/config"
 	"git.iscode.ca/msantos/mdg/format"
 	d2 "github.com/FurqanSoftware/goldmark-d2"
@@ -16,6 +15,7 @@ import (
 	"github.com/yuin/goldmark/extension"
 	"github.com/yuin/goldmark/parser"
 	"go.abhg.dev/goldmark/anchor"
+	mermaid "go.abhg.dev/goldmark/mermaid"
 	"go.abhg.dev/goldmark/toc"
 	"oss.terrastruct.com/d2/d2layouts/d2elklayout"
 	"oss.terrastruct.com/d2/d2themes/d2themescatalog"

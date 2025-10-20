@@ -3,7 +3,6 @@ module git.iscode.ca/msantos/mdg
 go 1.24.4
 
 require (
-	git.iscode.ca/msantos/goldmark-mermaid v0.0.0-20250316162732-7365edc2242d
 	github.com/FurqanSoftware/goldmark-d2 v0.0.0-20250906161746-6305edf4a24a
 	github.com/Kunde21/markdownfmt/v2 v2.1.1-0.20210810103848-727f02f4c51c
 	github.com/bwplotka/mdox v0.9.0
@@ -12,6 +11,7 @@ require (
 	github.com/yuin/goldmark-highlighting/v2 v2.0.0-20230729083705-37449abec8cc
 	github.com/yuin/goldmark-meta v1.1.0
 	go.abhg.dev/goldmark/anchor v0.2.0
+	go.abhg.dev/goldmark/mermaid v0.3.0
 	go.abhg.dev/goldmark/toc v0.12.0
 	gopkg.in/yaml.v3 v3.0.1
 	oss.terrastruct.com/d2 v0.7.1
