@@ -6,10 +6,10 @@ import (
 	"io"
 	"text/template"
 
-	d2 "git.iscode.ca/msantos/goldmark-d2"
 	mermaid "git.iscode.ca/msantos/goldmark-mermaid"
 	"git.iscode.ca/msantos/mdg/config"
 	"git.iscode.ca/msantos/mdg/format"
+	d2 "github.com/FurqanSoftware/goldmark-d2"
 	"github.com/yuin/goldmark"
 	highlighting "github.com/yuin/goldmark-highlighting/v2"
 	meta "github.com/yuin/goldmark-meta"
@@ -78,7 +78,7 @@ func New(opt ...Option) *Opt {
 				&anchor.Extender{},
 				&d2.Extender{
 					Layout:  d2elklayout.DefaultLayout,
-					ThemeID: d2themescatalog.TerminalGrayscale.ID,
+					ThemeID: &d2themescatalog.TerminalGrayscale.ID,
 				},
 			),
 		),

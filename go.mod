@@ -1,10 +1,10 @@
 module git.iscode.ca/msantos/mdg
 
-go 1.24.0
+go 1.24.4
 
 require (
-	git.iscode.ca/msantos/goldmark-d2 v0.0.0-20250316162625-110105d97ed9
 	git.iscode.ca/msantos/goldmark-mermaid v0.0.0-20250316162732-7365edc2242d
+	github.com/FurqanSoftware/goldmark-d2 v0.0.0-20250906161746-6305edf4a24a
 	github.com/Kunde21/markdownfmt/v2 v2.1.1-0.20210810103848-727f02f4c51c
 	github.com/bwplotka/mdox v0.9.0
 	github.com/gohugoio/hugo v0.151.2
