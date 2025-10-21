@@ -17,7 +17,7 @@ import (
 	"git.iscode.ca/msantos/mdg/markdown"
 )
 
-type State struct {
+type Opt struct {
 	verbose bool
 	md      *markdown.Opt
 }
@@ -70,32 +70,32 @@ func Run() {
 		}
 	}
 
-	s := &State{
+	o := &Opt{
 		md:      markdown.New(markdown.WithTemplate(t), markdown.WithCSS(cssContent)),
 		verbose: *verbose,
 	}
 
-	if err := s.run(dir); err != nil {
+	if err := o.run(dir); err != nil {
 		log.Fatalln(err)
 	}
 }
 
-func (s *State) run(dir string) error {
+func (o *Opt) run(dir string) error {
 	if dir == "-" {
-		return s.stdin()
+		return o.stdin()
 	}
-	return filepath.WalkDir(dir, s.convert)
+	return filepath.WalkDir(dir, o.convert)
 }
 
-func (s *State) stdin() error {
+func (o *Opt) stdin() error {
 	p, err := io.ReadAll(os.Stdin)
 	if err != nil {
 		return err
 	}
-	return s.md.Convert(p, os.Stdout)
+	return o.md.Convert(p, os.Stdout)
 }
 
-func (s *State) newer(md, html string) bool {
+func (o *Opt) newer(md, html string) bool {
 	stmd, err := os.Stat(md)
 	if err != nil {
 		return false
@@ -109,7 +109,7 @@ func (s *State) newer(md, html string) bool {
 	return stmd.ModTime().After(sthtml.ModTime())
 }
 
-func (s *State) convert(file string, d fs.DirEntry, err error) error {
+func (o *Opt) convert(file string, d fs.DirEntry, err error) error {
 	if err != nil {
 		return err
 	}
@@ -126,7 +126,7 @@ func (s *State) convert(file string, d fs.DirEntry, err error) error {
 
 	html := strings.TrimSuffix(file, filepath.Ext(file)) + ".html"
 
-	if !s.newer(file, html) {
+	if !o.newer(file, html) {
 		return nil
 	}
 
@@ -148,5 +148,5 @@ func (s *State) convert(file string, d fs.DirEntry, err error) error {
 		}
 	}()
 
-	return s.md.Convert(p, w)
+	return o.md.Convert(p, w)
 }
