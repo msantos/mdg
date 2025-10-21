@@ -2,6 +2,7 @@ package convert
 
 import (
 	_ "embed"
+	"errors"
 	"flag"
 	"fmt"
 	"io"
@@ -13,6 +14,7 @@ import (
 	"strings"
 	"text/template"
 
+	"git.iscode.ca/msantos/mdg/internal/pkg/fdpair"
 	"git.iscode.ca/msantos/mdg/pkg/config"
 	"git.iscode.ca/msantos/mdg/pkg/markdown"
 )
@@ -87,19 +89,39 @@ func Run() {
 
 func (o *Opt) run(dir string) error {
 	if dir == "-" {
-		return o.stdin()
+		o.check = "disable"
+
+		return o.convert(fdpair.New())
 	}
 
-	return filepath.WalkDir(dir, o.convert)
+	return filepath.WalkDir(dir, o.walkdir)
 }
 
-func (o *Opt) stdin() error {
-	b, err := io.ReadAll(os.Stdin)
+func (o *Opt) convert(r *fdpair.Opt) error {
+	b, err := io.ReadAll(r)
 	if err != nil {
-		return err
+		return fmt.Errorf("%s: %w", r.Name(), err)
 	}
 
-	return o.md.Convert(b, os.Stdout)
+	w, err := r.OpenOutput(r.File)
+
+	switch {
+	case err == nil:
+	case errors.Is(err, ErrSkipMD):
+		return nil
+	default:
+		return fmt.Errorf("%s: %w", r.Name(), err)
+	}
+
+	if err := o.md.Convert(b, w); err != nil {
+		return fmt.Errorf("%s: %w", w.Name(), err)
+	}
+
+	if err := r.CloseOutput(r.File, w); err != nil {
+		return fmt.Errorf("%s: %w", w.Name(), err)
+	}
+
+	return nil
 }
 
 func (o *Opt) compare(md, html string) bool {
@@ -125,7 +147,32 @@ func (o *Opt) compare(md, html string) bool {
 	return stmd.ModTime().After(sthtml.ModTime())
 }
 
-func (o *Opt) convert(file string, d fs.DirEntry, err error) error {
+var ErrSkipMD = errors.New("skip markdown file")
+
+func (o *Opt) openOutput(r *os.File) (*os.File, error) {
+	html := strings.TrimSuffix(r.Name(), filepath.Ext(r.Name())) + ".html"
+
+	if !o.compare(r.Name(), html) {
+		return nil, ErrSkipMD
+	}
+
+	if o.verbose {
+		log.Println("Converting:", r.Name(), " -> ", html)
+	}
+
+	w, err := os.OpenFile(html, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0644)
+	if err != nil {
+		return nil, fmt.Errorf("%s: %w", html, err)
+	}
+
+	return w, nil
+}
+
+func (o *Opt) closeOutput(_, w *os.File) error {
+	return w.Close()
+}
+
+func (o *Opt) walkdir(file string, d fs.DirEntry, err error) error {
 	if err != nil {
 		return err
 	}
@@ -142,33 +189,18 @@ func (o *Opt) convert(file string, d fs.DirEntry, err error) error {
 		return nil
 	}
 
-	html := strings.TrimSuffix(file, filepath.Ext(file)) + ".html"
-
-	if !o.compare(file, html) {
-		return nil
-	}
-
-	if o.verbose {
-		log.Println("Converting:", file, " -> ", html)
-	}
-
-	b, err := os.ReadFile(file)
+	r, err := os.Open(file)
 	if err != nil {
 		return fmt.Errorf("%s: %w", file, err)
 	}
 
-	w, err := os.OpenFile(html, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0644)
-	if err != nil {
-		return fmt.Errorf("%s: %w", file, err)
-	}
+	fd := fdpair.New()
 
-	defer func() {
-		if err := w.Close(); err != nil {
-			log.Println(file, err)
-		}
-	}()
+	fd.File = r
+	fd.OpenOutput = o.openOutput
+	fd.CloseOutput = o.closeOutput
 
-	if err := o.md.Convert(b, w); err != nil {
+	if err := o.convert(fd); err != nil {
 		return fmt.Errorf("%s: %w", file, err)
 	}
 

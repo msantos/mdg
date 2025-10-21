@@ -13,6 +13,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"git.iscode.ca/msantos/mdg/internal/pkg/fdpair"
 	"git.iscode.ca/msantos/mdg/pkg/config"
 	"git.iscode.ca/msantos/mdg/pkg/markdown"
 
@@ -20,9 +21,10 @@ import (
 )
 
 type Opt struct {
-	diff    bool
-	verbose bool
-	md      *markdown.Opt
+	diff      bool
+	verbose   bool
+	md        *markdown.Opt
+	isChanged func(_, _ []byte) bool
 }
 
 func usage() {
@@ -50,9 +52,10 @@ func Run() {
 	}
 
 	o := &Opt{
-		md:      markdown.New(),
-		diff:    *diff,
-		verbose: *verbose,
+		md:        markdown.New(),
+		diff:      *diff,
+		verbose:   *verbose,
+		isChanged: func(_, _ []byte) bool { return true },
 	}
 
 	for _, v := range flag.Args() {
@@ -64,32 +67,73 @@ func Run() {
 
 func (o *Opt) run(dir string) error {
 	if dir == "-" {
-		return o.stdin()
+		return o.format(fdpair.New())
 	}
 
-	return filepath.WalkDir(dir, o.format)
+	o.isChanged = func(in, out []byte) bool {
+		return !bytes.Equal(in, out)
+	}
+
+	return filepath.WalkDir(dir, o.walkdir)
 }
 
-func (o *Opt) stdin() error {
-	b, err := io.ReadAll(os.Stdin)
+func (o *Opt) openOutput(r *os.File) (*os.File, error) {
+	if o.verbose {
+		log.Println("Formatting:", r.Name())
+	}
+
+	w, err := os.CreateTemp(filepath.Dir(r.Name()), filepath.Base(r.Name()))
+	if err != nil {
+		return nil, fmt.Errorf("%s: %w", r.Name(), err)
+	}
+
+	return w, nil
+}
+
+func (o *Opt) closeOutput(r, w *os.File) error {
+	err := w.Sync()
+	if err != nil {
+		return fmt.Errorf("%s: %w", w.Name(), err)
+	}
+
+	defer func() {
+		if err == nil {
+			return
+		}
+
+		if err := os.Remove(w.Name()); err != nil {
+			log.Println(w.Name(), err)
+		}
+	}()
+
+	err = os.Rename(w.Name(), r.Name())
+	if err != nil {
+		return fmt.Errorf("%s: %w", w.Name(), err)
+	}
+
+	if err := w.Close(); err != nil {
+		log.Println(w.Name(), err)
+	}
+
+	return nil
+}
+
+func (o *Opt) format(r *fdpair.Opt) error {
+	b, err := io.ReadAll(r)
 	if err != nil {
 		return err
 	}
 
+	var buf bytes.Buffer
+
+	if err := o.md.Format(b, &buf); err != nil {
+		return fmt.Errorf("%s: %w", r.Name(), err)
+	}
+
 	if o.diff {
-		var buf bytes.Buffer
-
-		if err := o.md.Format(b, &buf); err != nil {
-			return err
-		}
-
-		if bytes.Equal(b, buf.Bytes()) {
-			return nil
-		}
-
 		d := gitdiff.CompareBytes(
-			b, "stdin",
-			buf.Bytes(), "stdin (formatted)",
+			b, r.Name(),
+			buf.Bytes(), fmt.Sprintf("%s (formatted)", r.Name()),
 		)
 
 		fmt.Println(string(d.ToCombinedFormat()))
@@ -97,10 +141,27 @@ func (o *Opt) stdin() error {
 		return nil
 	}
 
-	return o.md.Format(b, os.Stdout)
+	if !o.isChanged(b, buf.Bytes()) {
+		return nil
+	}
+
+	w, err := r.OpenOutput(r.File)
+	if err != nil {
+		return fmt.Errorf("%s: %w", r.Name(), err)
+	}
+
+	if _, err := w.Write(buf.Bytes()); err != nil {
+		return fmt.Errorf("%s: %w", w.Name(), err)
+	}
+
+	if err := r.CloseOutput(r.File, w); err != nil {
+		return fmt.Errorf("%s: %w", w.Name(), err)
+	}
+
+	return nil
 }
 
-func (o *Opt) format(file string, d fs.DirEntry, err error) error {
+func (o *Opt) walkdir(file string, d fs.DirEntry, err error) error {
 	if err != nil {
 		return err
 	}
@@ -117,62 +178,24 @@ func (o *Opt) format(file string, d fs.DirEntry, err error) error {
 		return nil
 	}
 
-	b, err := os.ReadFile(file)
-	if err != nil {
-		return fmt.Errorf("%s: %w", file, err)
-	}
-
-	var buf bytes.Buffer
-
-	if err := o.md.Format(b, &buf); err != nil {
-		return fmt.Errorf("%s: %w", file, err)
-	}
-
-	if bytes.Equal(b, buf.Bytes()) {
-		return nil
-	}
-
-	if o.diff {
-		d := gitdiff.CompareBytes(
-			b, file,
-			buf.Bytes(), file+" (formatted)",
-		)
-
-		fmt.Println(string(d.ToCombinedFormat()))
-
-		return nil
-	}
-
-	if o.verbose {
-		log.Println("Formatting:", file)
-	}
-
-	w, err := os.CreateTemp(filepath.Dir(file), filepath.Base(file))
+	r, err := os.Open(file)
 	if err != nil {
 		return fmt.Errorf("%s: %w", file, err)
 	}
 
 	defer func() {
-		if err := w.Close(); err != nil {
-			log.Println(file, err)
-		}
-
-		if err != nil {
-			if err := os.Remove(w.Name()); err != nil {
-				log.Println(file, err)
-			}
+		if err := r.Close(); err != nil {
+			log.Println(r.Name(), err)
 		}
 	}()
 
-	if _, err := w.Write(buf.Bytes()); err != nil {
-		return fmt.Errorf("%s: %w", file, err)
-	}
+	fd := fdpair.New()
 
-	if err := w.Sync(); err != nil {
-		return fmt.Errorf("%s: %w", file, err)
-	}
+	fd.File = r
+	fd.OpenOutput = o.openOutput
+	fd.CloseOutput = o.closeOutput
 
-	if err := os.Rename(w.Name(), file); err != nil {
+	if err := o.format(fd); err != nil {
 		return fmt.Errorf("%s: %w", file, err)
 	}
 
