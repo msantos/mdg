@@ -42,9 +42,9 @@ func Run() {
 
 	flag.Parse()
 
-	dir := "."
-	if flag.NArg() > 0 {
-		dir = flag.Arg(0)
+	if flag.NArg() < 1 {
+		usage()
+		os.Exit(2)
 	}
 
 	cssContent := ""
@@ -75,7 +75,7 @@ func Run() {
 		verbose: *verbose,
 	}
 
-	if err := o.run(dir); err != nil {
+	if err := o.run(flag.Arg(0)); err != nil {
 		log.Fatalln(err)
 	}
 }
