@@ -93,6 +93,7 @@ func (o *Opt) stdin() error {
 	if err != nil {
 		return err
 	}
+
 	return o.md.Convert(p, os.Stdout)
 }
 
@@ -133,7 +134,9 @@ func (o *Opt) convert(file string, d fs.DirEntry, err error) error {
 		return nil
 	}
 
-	log.Println("Converting:", file, " -> ", html)
+	if o.verbose {
+		log.Println("Converting:", file, " -> ", html)
+	}
 
 	b, err := os.ReadFile(file)
 	if err != nil {
