@@ -13,8 +13,8 @@ import (
 	"strings"
 	"text/template"
 
-	"git.iscode.ca/msantos/mdg/config"
-	"git.iscode.ca/msantos/mdg/markdown"
+	"git.iscode.ca/msantos/mdg/pkg/config"
+	"git.iscode.ca/msantos/mdg/pkg/markdown"
 )
 
 type Opt struct {

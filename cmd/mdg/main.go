@@ -9,7 +9,7 @@ import (
 
 	"git.iscode.ca/msantos/mdg/cmd/mdg/internal/convert"
 	"git.iscode.ca/msantos/mdg/cmd/mdg/internal/format"
-	"git.iscode.ca/msantos/mdg/config"
+	"git.iscode.ca/msantos/mdg/pkg/config"
 )
 
 var f = flag.NewFlagSet(os.Args[0], flag.ExitOnError)
