@@ -63,6 +63,7 @@ func (o *Opt) run(dir string) error {
 	if dir == "-" {
 		return o.stdin()
 	}
+
 	return filepath.WalkDir(dir, o.format)
 }
 
@@ -71,6 +72,7 @@ func (o *Opt) stdin() error {
 	if err != nil {
 		return err
 	}
+
 	if o.diff {
 		var buf bytes.Buffer
 
@@ -86,9 +88,12 @@ func (o *Opt) stdin() error {
 			p, "stdin",
 			buf.Bytes(), "stdin (formatted)",
 		)
+
 		fmt.Println(string(d.ToCombinedFormat()))
+
 		return nil
 	}
+
 	return o.md.Format(p, os.Stdout)
 }
 
@@ -96,9 +101,11 @@ func (o *Opt) format(file string, d fs.DirEntry, err error) error {
 	if err != nil {
 		return err
 	}
+
 	if d.Type() != 0 {
 		return nil
 	}
+
 	if strings.HasPrefix(file, ".") || strings.HasPrefix(file, "_") {
 		return nil
 	}
@@ -129,6 +136,7 @@ func (o *Opt) format(file string, d fs.DirEntry, err error) error {
 		)
 
 		fmt.Println(string(d.ToCombinedFormat()))
+
 		return nil
 	}
 
