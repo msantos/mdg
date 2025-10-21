@@ -4,16 +4,14 @@ mdg [*options*] [*command*] [-|*directory*]
 
 # DESCRIPTION
 
-mdg generates html and formatted markdown from markdown input.
+Generate formatted markdown or HTML from markdown input.
 
 mdg accepts an optional argument:
 
 * no argument: mdg walks the current directory for any files ending with
   the `.md` extension
-
 * path: mdg walks the specified path for any files ending with the
   `.md` extension
-
 * `-`: read markdown from stdin
 
 # BUILDING
@@ -24,7 +22,7 @@ go install git.iscode.ca/msantos/mgd/cmd/mgd@latest
 
 # EXAMPLES
 
-```
+```bash
 # current directory
 mdg convert
 
