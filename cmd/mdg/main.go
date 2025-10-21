@@ -35,17 +35,15 @@ func main() {
 	f.Usage = func() { usage() }
 	_ = f.Parse(os.Args[1:])
 
-	oargs := f.Args()
-
 	command := "help"
 
 	if len(os.Args) > 1 {
-		command = oargs[0]
+		command = f.Args()[0]
 	}
 
 	var args []string
-	if len(oargs) > 1 {
-		args = oargs[1:]
+	if f.NArg() > 1 {
+		args = f.Args()[1:]
 	}
 
 	os.Args = append(os.Args[:1], args...)
