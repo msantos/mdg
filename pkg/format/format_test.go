@@ -5,7 +5,7 @@ import (
 	"errors"
 	"testing"
 
-	"git.iscode.ca/msantos/mdg/format"
+	"git.iscode.ca/msantos/mdg/pkg/format"
 )
 
 const (
