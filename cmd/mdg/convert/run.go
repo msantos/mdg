@@ -75,8 +75,10 @@ func Run() {
 		verbose: *verbose,
 	}
 
-	if err := o.run(flag.Arg(0)); err != nil {
-		log.Fatalln(err)
+	for _, v := range flag.Args() {
+		if err := o.run(v); err != nil {
+			log.Fatalln(err)
+		}
 	}
 }
 
