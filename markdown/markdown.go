@@ -112,6 +112,7 @@ func metadata(key string, fm map[string]any, def string) string {
 	if s == "" {
 		return def
 	}
+
 	return s
 }
 
@@ -147,5 +148,6 @@ func (o *Opt) Format(content []byte, w io.Writer) error {
 	if err != nil {
 		return err
 	}
+
 	return o.f.Format(w, md)
 }
