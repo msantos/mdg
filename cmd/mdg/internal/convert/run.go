@@ -142,19 +142,23 @@ func (o *Opt) convert(file string, d fs.DirEntry, err error) error {
 
 	b, err := os.ReadFile(file)
 	if err != nil {
-		return err
+		return fmt.Errorf("%s: %w", file, err)
 	}
 
 	w, err := os.OpenFile(html, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0644)
 	if err != nil {
-		return err
+		return fmt.Errorf("%s: %w", file, err)
 	}
 
 	defer func() {
 		if err := w.Close(); err != nil {
-			log.Println(err)
+			log.Println(file, err)
 		}
 	}()
 
-	return o.md.Convert(b, w)
+	if err := o.md.Convert(b, w); err != nil {
+		return fmt.Errorf("%s: %w", file, err)
+	}
+
+	return nil
 }
