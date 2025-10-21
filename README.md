@@ -6,10 +6,8 @@ mdg [*options*] [*command*] [-|*directory*]
 
 Generate formatted markdown or HTML from markdown input.
 
-mdg accepts an optional argument:
+mdg requires an argument:
 
-* no argument: mdg walks the current directory for any files ending with
-  the `.md` extension
 * path: mdg walks the specified path for any files ending with the
   `.md` extension
 * `-`: read markdown from stdin
