@@ -145,7 +145,7 @@ func (o *Opt) convert(file string, d fs.DirEntry, err error) error {
 		return err
 	}
 
-	w, err := os.OpenFile(html, os.O_RDWR|os.O_CREATE, 0644)
+	w, err := os.OpenFile(html, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0644)
 	if err != nil {
 		return err
 	}
