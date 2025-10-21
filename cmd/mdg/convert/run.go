@@ -84,6 +84,7 @@ func (o *Opt) run(dir string) error {
 	if dir == "-" {
 		return o.stdin()
 	}
+
 	return filepath.WalkDir(dir, o.convert)
 }
 
@@ -113,9 +114,11 @@ func (o *Opt) convert(file string, d fs.DirEntry, err error) error {
 	if err != nil {
 		return err
 	}
+
 	if d.Type() != 0 {
 		return nil
 	}
+
 	if strings.HasPrefix(file, ".") || strings.HasPrefix(file, "_") {
 		return nil
 	}
