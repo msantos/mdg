@@ -148,6 +148,7 @@ func String(key string, fm map[string]any) string {
 	if !ok {
 		return ""
 	}
+
 	switch v := val.(type) {
 	case string:
 		return v
@@ -158,6 +159,7 @@ func String(key string, fm map[string]any) string {
 		}
 		return strings.Join(a, ", ")
 	}
+
 	return ""
 }
 
@@ -166,10 +168,12 @@ func Map(key string, fm map[string]any) map[string]string {
 	if !ok {
 		return nil
 	}
+
 	mi, ok := val.(map[string]interface{})
 	if !ok {
 		return nil
 	}
+
 	m := make(map[string]string)
 	for k, v := range mi {
 		s, ok := v.(string)
@@ -177,5 +181,6 @@ func Map(key string, fm map[string]any) map[string]string {
 			m[k] = s
 		}
 	}
+
 	return m
 }
