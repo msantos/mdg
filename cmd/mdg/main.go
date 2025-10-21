@@ -53,9 +53,7 @@ func main() {
 	switch command {
 	case "convert":
 		convert.Run()
-	case "format":
-		fallthrough
-	case "fmt":
+	case "fmt", "format":
 		format.Run()
 	case "help":
 		usage()
