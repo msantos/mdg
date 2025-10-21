@@ -18,7 +18,7 @@ import (
 	"github.com/bwplotka/mdox/pkg/gitdiff"
 )
 
-type State struct {
+type Opt struct {
 	diff    bool
 	verbose bool
 	md      *markdown.Opt
@@ -48,33 +48,33 @@ func Run() {
 		dir = flag.Arg(0)
 	}
 
-	s := &State{
+	o := &Opt{
 		md:      markdown.New(),
 		diff:    *diff,
 		verbose: *verbose,
 	}
 
-	if err := s.run(dir); err != nil {
+	if err := o.run(dir); err != nil {
 		log.Fatalln(err)
 	}
 }
 
-func (s *State) run(dir string) error {
+func (o *Opt) run(dir string) error {
 	if dir == "-" {
-		return s.stdin()
+		return o.stdin()
 	}
-	return filepath.WalkDir(dir, s.format)
+	return filepath.WalkDir(dir, o.format)
 }
 
-func (s *State) stdin() error {
+func (o *Opt) stdin() error {
 	p, err := io.ReadAll(os.Stdin)
 	if err != nil {
 		return err
 	}
-	if s.diff {
+	if o.diff {
 		var buf bytes.Buffer
 
-		if err := s.md.Format(p, &buf); err != nil {
+		if err := o.md.Format(p, &buf); err != nil {
 			return err
 		}
 
@@ -89,10 +89,10 @@ func (s *State) stdin() error {
 		fmt.Println(string(d.ToCombinedFormat()))
 		return nil
 	}
-	return s.md.Format(p, os.Stdout)
+	return o.md.Format(p, os.Stdout)
 }
 
-func (s *State) format(file string, d fs.DirEntry, err error) error {
+func (o *Opt) format(file string, d fs.DirEntry, err error) error {
 	if err != nil {
 		return err
 	}
@@ -114,7 +114,7 @@ func (s *State) format(file string, d fs.DirEntry, err error) error {
 
 	var buf bytes.Buffer
 
-	if err := s.md.Format(p, &buf); err != nil {
+	if err := o.md.Format(p, &buf); err != nil {
 		return err
 	}
 
@@ -122,7 +122,7 @@ func (s *State) format(file string, d fs.DirEntry, err error) error {
 		return nil
 	}
 
-	if s.diff {
+	if o.diff {
 		d := gitdiff.CompareBytes(
 			p, file,
 			buf.Bytes(), file+" (formatted)",
