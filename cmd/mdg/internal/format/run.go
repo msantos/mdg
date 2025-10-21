@@ -118,13 +118,13 @@ func (o *Opt) format(file string, d fs.DirEntry, err error) error {
 
 	b, err := os.ReadFile(file)
 	if err != nil {
-		return err
+		return fmt.Errorf("%s: %w", file, err)
 	}
 
 	var buf bytes.Buffer
 
 	if err := o.md.Format(b, &buf); err != nil {
-		return err
+		return fmt.Errorf("%s: %w", file, err)
 	}
 
 	if bytes.Equal(b, buf.Bytes()) {
@@ -148,28 +148,32 @@ func (o *Opt) format(file string, d fs.DirEntry, err error) error {
 
 	w, err := os.CreateTemp(filepath.Dir(file), filepath.Base(file))
 	if err != nil {
-		return err
+		return fmt.Errorf("%s: %w", file, err)
 	}
 
 	defer func() {
 		if err := w.Close(); err != nil {
-			log.Println(err)
+			log.Println(file, err)
 		}
 
 		if err != nil {
 			if err := os.Remove(w.Name()); err != nil {
-				log.Println(err)
+				log.Println(file, err)
 			}
 		}
 	}()
 
 	if _, err := w.Write(buf.Bytes()); err != nil {
-		return err
+		return fmt.Errorf("%s: %w", file, err)
 	}
 
 	if err := w.Sync(); err != nil {
-		return err
+		return fmt.Errorf("%s: %w", file, err)
 	}
 
-	return os.Rename(w.Name(), file)
+	if err := os.Rename(w.Name(), file); err != nil {
+		return fmt.Errorf("%s: %w", file, err)
+	}
+
+	return nil
 }
