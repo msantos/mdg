@@ -140,7 +140,9 @@ func (o *Opt) format(file string, d fs.DirEntry, err error) error {
 		return nil
 	}
 
-	log.Println("Formatting:", file)
+	if o.verbose {
+		log.Println("Formatting:", file)
+	}
 
 	w, err := os.CreateTemp(filepath.Dir(file), filepath.Base(file))
 	if err != nil {
