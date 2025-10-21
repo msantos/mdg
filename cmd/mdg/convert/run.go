@@ -135,7 +135,7 @@ func (o *Opt) convert(file string, d fs.DirEntry, err error) error {
 
 	log.Println("Converting:", file, " -> ", html)
 
-	p, err := os.ReadFile(file)
+	b, err := os.ReadFile(file)
 	if err != nil {
 		return err
 	}
@@ -151,5 +151,5 @@ func (o *Opt) convert(file string, d fs.DirEntry, err error) error {
 		}
 	}()
 
-	return o.md.Convert(p, w)
+	return o.md.Convert(b, w)
 }
