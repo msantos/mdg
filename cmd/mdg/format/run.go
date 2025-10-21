@@ -68,7 +68,7 @@ func (o *Opt) run(dir string) error {
 }
 
 func (o *Opt) stdin() error {
-	p, err := io.ReadAll(os.Stdin)
+	b, err := io.ReadAll(os.Stdin)
 	if err != nil {
 		return err
 	}
@@ -76,16 +76,16 @@ func (o *Opt) stdin() error {
 	if o.diff {
 		var buf bytes.Buffer
 
-		if err := o.md.Format(p, &buf); err != nil {
+		if err := o.md.Format(b, &buf); err != nil {
 			return err
 		}
 
-		if bytes.Equal(p, buf.Bytes()) {
+		if bytes.Equal(b, buf.Bytes()) {
 			return nil
 		}
 
 		d := gitdiff.CompareBytes(
-			p, "stdin",
+			b, "stdin",
 			buf.Bytes(), "stdin (formatted)",
 		)
 
@@ -94,7 +94,7 @@ func (o *Opt) stdin() error {
 		return nil
 	}
 
-	return o.md.Format(p, os.Stdout)
+	return o.md.Format(b, os.Stdout)
 }
 
 func (o *Opt) format(file string, d fs.DirEntry, err error) error {
@@ -114,24 +114,24 @@ func (o *Opt) format(file string, d fs.DirEntry, err error) error {
 		return nil
 	}
 
-	p, err := os.ReadFile(file)
+	b, err := os.ReadFile(file)
 	if err != nil {
 		return err
 	}
 
 	var buf bytes.Buffer
 
-	if err := o.md.Format(p, &buf); err != nil {
+	if err := o.md.Format(b, &buf); err != nil {
 		return err
 	}
 
-	if bytes.Equal(p, buf.Bytes()) {
+	if bytes.Equal(b, buf.Bytes()) {
 		return nil
 	}
 
 	if o.diff {
 		d := gitdiff.CompareBytes(
-			p, file,
+			b, file,
 			buf.Bytes(), file+" (formatted)",
 		)
 
