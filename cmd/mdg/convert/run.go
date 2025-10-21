@@ -89,12 +89,12 @@ func (o *Opt) run(dir string) error {
 }
 
 func (o *Opt) stdin() error {
-	p, err := io.ReadAll(os.Stdin)
+	b, err := io.ReadAll(os.Stdin)
 	if err != nil {
 		return err
 	}
 
-	return o.md.Convert(p, os.Stdout)
+	return o.md.Convert(b, os.Stdout)
 }
 
 func (o *Opt) newer(md, html string) bool {
