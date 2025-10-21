@@ -19,6 +19,7 @@ import (
 
 type Opt struct {
 	verbose bool
+	check   string
 	md      *markdown.Opt
 }
 
@@ -36,6 +37,7 @@ Convert markdown documents to HTML.
 func Run() {
 	css := flag.String("css", "", "CSS file")
 	tmpl := flag.String("template", "", "HTML template")
+	check := flag.String("check", "newer", "Compare markdown files to HTML before conversion: newer, disable")
 	verbose := flag.Bool("verbose", false, "Enable debug messages")
 
 	flag.Usage = func() { usage() }
@@ -72,6 +74,7 @@ func Run() {
 
 	o := &Opt{
 		md:      markdown.New(markdown.WithTemplate(t), markdown.WithCSS(cssContent)),
+		check:   *check,
 		verbose: *verbose,
 	}
 
@@ -99,7 +102,16 @@ func (o *Opt) stdin() error {
 	return o.md.Convert(b, os.Stdout)
 }
 
-func (o *Opt) newer(md, html string) bool {
+func (o *Opt) compare(md, html string) bool {
+	switch o.check {
+	case "", "disable":
+		return true
+	case "newer":
+	default:
+		log.Println("invalid check:", o.check)
+		return false
+	}
+
 	stmd, err := os.Stat(md)
 	if err != nil {
 		return false
@@ -132,7 +144,7 @@ func (o *Opt) convert(file string, d fs.DirEntry, err error) error {
 
 	html := strings.TrimSuffix(file, filepath.Ext(file)) + ".html"
 
-	if !o.newer(file, html) {
+	if !o.compare(file, html) {
 		return nil
 	}
 
