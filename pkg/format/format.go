@@ -26,14 +26,19 @@ type Markdown struct {
 }
 
 // Parse returns the frontmatter and markdown content.
-func Parse(name string, source []byte) (*Markdown, error) {
+func Parse(name string, r io.Reader) (*Markdown, error) {
+	source, err := io.ReadAll(r)
+	if err != nil {
+		return nil, err
+	}
+
 	md := &Markdown{
 		Content: source,
 		source:  source,
 		name:    name,
 	}
 
-	fm, err := pageparser.ParseFrontMatterAndContent(bytes.NewReader(source))
+	fm, err := pageparser.ParseFrontMatterAndContent(bytes.NewBuffer(source))
 	if err != nil {
 		return md, err
 	}

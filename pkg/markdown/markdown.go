@@ -116,8 +116,8 @@ func metadata(key string, fm map[string]any, def string) string {
 	return s
 }
 
-func (o *Opt) Convert(content []byte, w io.Writer) error {
-	md, err := format.Parse("", content)
+func (o *Opt) Convert(r io.Reader, w io.Writer) error {
+	md, err := format.Parse("", r)
 	if err != nil {
 		return err
 	}
@@ -143,8 +143,8 @@ func (o *Opt) Convert(content []byte, w io.Writer) error {
 	return o.t.Execute(w, metadata)
 }
 
-func (o *Opt) Format(content []byte, w io.Writer) error {
-	md, err := format.Parse("", content)
+func (o *Opt) Format(r io.Reader, w io.Writer) error {
+	md, err := format.Parse("", r)
 	if err != nil {
 		return err
 	}

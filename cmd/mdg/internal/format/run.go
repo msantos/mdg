@@ -126,7 +126,7 @@ func (o *Opt) format(r *fdpair.Opt) error {
 
 	var buf bytes.Buffer
 
-	if err := o.md.Format(b, &buf); err != nil {
+	if err := o.md.Format(bytes.NewBuffer(b), &buf); err != nil {
 		return fmt.Errorf("%s: %w", r.Name(), err)
 	}
 

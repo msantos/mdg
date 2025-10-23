@@ -5,7 +5,6 @@ import (
 	"errors"
 	"flag"
 	"fmt"
-	"io"
 	"io/fs"
 	"log"
 	"os"
@@ -98,11 +97,6 @@ func (o *Opt) run(dir string) error {
 }
 
 func (o *Opt) convert(r *fdpair.Opt) error {
-	b, err := io.ReadAll(r)
-	if err != nil {
-		return fmt.Errorf("%s: %w", r.Name(), err)
-	}
-
 	w, err := r.OpenOutput(r.File)
 
 	switch {
@@ -113,7 +107,7 @@ func (o *Opt) convert(r *fdpair.Opt) error {
 		return fmt.Errorf("%s: %w", r.Name(), err)
 	}
 
-	if err := o.md.Convert(b, w); err != nil {
+	if err := o.md.Convert(r, w); err != nil {
 		return fmt.Errorf("%s: %w", w.Name(), err)
 	}
 
