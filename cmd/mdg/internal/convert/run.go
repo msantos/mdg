@@ -46,9 +46,9 @@ func Run() {
 
 	flag.Parse()
 
-	if flag.NArg() < 1 {
-		usage()
-		os.Exit(2)
+	args := []string{"-"}
+	if flag.NArg() > 0 {
+		args = flag.Args()
 	}
 
 	cssContent := ""
@@ -80,7 +80,7 @@ func Run() {
 		verbose: *verbose,
 	}
 
-	for _, v := range flag.Args() {
+	for _, v := range args {
 		if err := o.run(v); err != nil {
 			log.Fatalln(err)
 		}
