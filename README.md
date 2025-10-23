@@ -1,16 +1,18 @@
 # SYNOPSIS
 
-mdg [*options*] [*command*] [-|*directory*]
+mdg [*options*] [fmt|convert] [-|*directory*|*file*] [...]
 
 # DESCRIPTION
 
 Generate formatted markdown or HTML from markdown input.
 
-mdg requires an argument:
+By default, mdg reads from standard input and writes to standard output.
 
-* path: mdg walks the specified path for any files ending with the
+Arguments may be:
+* `-`: read markdown from stdin (the default)
+* file: path to markdown file
+* directory: walk the specified path for any files ending with the
   `.md` extension
-* `-`: read markdown from stdin
 
 # BUILDING
 
