@@ -3,7 +3,6 @@ package main
 import (
 	"flag"
 	"fmt"
-	"log"
 	"os"
 	"path"
 
@@ -31,7 +30,6 @@ Commands:
 }
 
 func main() {
-	log.SetOutput(os.Stderr)
 	f.Usage = func() { usage() }
 	_ = f.Parse(os.Args[1:])
 

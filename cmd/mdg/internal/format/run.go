@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"io"
 	"io/fs"
-	"log"
 	"os"
 	"path"
 	"path/filepath"
@@ -60,7 +59,8 @@ func Run() {
 
 	for _, v := range args {
 		if err := o.run(v); err != nil {
-			log.Fatalln(err)
+			fmt.Fprintln(os.Stderr, err)
+			os.Exit(1)
 		}
 	}
 }
@@ -79,7 +79,7 @@ func (o *Opt) run(dir string) error {
 
 func (o *Opt) openOutput(r *os.File) (*os.File, error) {
 	if o.verbose {
-		log.Println("Formatting:", r.Name())
+		fmt.Fprintln(os.Stderr, "Formatting:", r.Name())
 	}
 
 	w, err := os.CreateTemp(filepath.Dir(r.Name()), filepath.Base(r.Name()))
@@ -102,7 +102,7 @@ func (o *Opt) closeOutput(r, w *os.File) error {
 		}
 
 		if err := os.Remove(w.Name()); err != nil {
-			log.Println(w.Name(), err)
+			fmt.Fprintln(os.Stderr, w.Name(), err)
 		}
 	}()
 
@@ -112,7 +112,7 @@ func (o *Opt) closeOutput(r, w *os.File) error {
 	}
 
 	if err := w.Close(); err != nil {
-		log.Println(w.Name(), err)
+		fmt.Fprintln(os.Stderr, w.Name(), err)
 	}
 
 	return nil
@@ -187,7 +187,7 @@ func (o *Opt) walkdir(file string, d fs.DirEntry, err error) error {
 
 	defer func() {
 		if err := r.Close(); err != nil {
-			log.Println(r.Name(), err)
+			fmt.Fprintln(os.Stderr, r.Name(), err)
 		}
 	}()
 

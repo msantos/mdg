@@ -6,7 +6,6 @@ import (
 	"flag"
 	"fmt"
 	"io/fs"
-	"log"
 	"os"
 	"path"
 	"path/filepath"
@@ -54,7 +53,8 @@ func Run() {
 	if *css != "" {
 		b, err := os.ReadFile(*css)
 		if err != nil {
-			log.Fatalf("css: %v\n", err)
+			fmt.Fprintf(os.Stderr, "css: %v\n", err)
+			os.Exit(1)
 		}
 		cssContent = string(b)
 	}
@@ -64,12 +64,14 @@ func Run() {
 	if *tmpl != "" {
 		b, err := os.ReadFile(*tmpl)
 		if err != nil {
-			log.Fatalf("template: %v\n", err)
+			fmt.Fprintf(os.Stderr, "template: %v\n", err)
+			os.Exit(1)
 		}
 
 		t, err = template.New("index").Parse(string(b))
 		if err != nil {
-			log.Fatalf("template: %v\n", err)
+			fmt.Fprintf(os.Stderr, "template: %v\n", err)
+			os.Exit(1)
 		}
 	}
 
@@ -81,7 +83,8 @@ func Run() {
 
 	for _, v := range args {
 		if err := o.run(v); err != nil {
-			log.Fatalln(err)
+			fmt.Fprintln(os.Stderr, err)
+			os.Exit(1)
 		}
 	}
 }
@@ -124,7 +127,7 @@ func (o *Opt) compare(md, html string) bool {
 		return true
 	case "newer":
 	default:
-		log.Println("invalid check:", o.check)
+		fmt.Fprintln(os.Stderr, "invalid check:", o.check)
 		return false
 	}
 
@@ -151,7 +154,7 @@ func (o *Opt) openOutput(r *os.File) (*os.File, error) {
 	}
 
 	if o.verbose {
-		log.Println("Converting:", r.Name(), " -> ", html)
+		fmt.Fprintln(os.Stderr, "Converting:", r.Name(), " -> ", html)
 	}
 
 	w, err := os.OpenFile(html, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0644)
