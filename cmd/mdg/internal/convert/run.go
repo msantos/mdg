@@ -110,11 +110,15 @@ func (o *Opt) convert(r *fdpair.Opt) error {
 		return fmt.Errorf("%s: %w", r.Name(), err)
 	}
 
-	if err := o.md.Convert(r, w); err != nil {
-		return fmt.Errorf("%s: %w", w.Name(), err)
-	}
+	defer func() {
+		if rerr := r.CloseOutput(r.File, w); rerr != nil {
+			if err == nil {
+				err = fmt.Errorf("%s: %w", w.Name(), rerr)
+			}
+		}
+	}()
 
-	if err := r.CloseOutput(r.File, w); err != nil {
+	if err := o.md.Convert(r, w); err != nil {
 		return fmt.Errorf("%s: %w", w.Name(), err)
 	}
 
