@@ -2,7 +2,6 @@ package format_test
 
 import (
 	"bytes"
-	"errors"
 	"testing"
 
 	"git.iscode.ca/msantos/mdg/pkg/format"
@@ -144,7 +143,7 @@ func TestDiffMarkdown(t *testing.T) {
 	f := format.New(format.WithStyle(format.StyleWrap))
 
 	diff, err := f.Diff(md)
-	if !errors.Is(err, format.ErrNotFormatted) {
+	if err != nil {
 		t.Errorf("%v", err)
 		return
 	}

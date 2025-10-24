@@ -3,7 +3,6 @@ package format
 
 import (
 	"bytes"
-	"errors"
 	"io"
 	"strings"
 
@@ -14,8 +13,6 @@ import (
 	"github.com/yuin/goldmark/extension"
 	"github.com/yuin/goldmark/parser"
 )
-
-var ErrNotFormatted = errors.New("markdown not formatted")
 
 type Markdown struct {
 	FrontMatter map[string]any
@@ -122,8 +119,8 @@ func (f *Formatter) Format(w io.Writer, md *Markdown) error {
 }
 
 // Diff verifies if the document has been formatted. If the document
-// is unformatted, Diff returns the differences and the ErrNotFormatted
-// error. Otherwise diff will be an empty string.
+// is unformatted, Diff returns the differences. Otherwise diff will be an
+// empty string.
 func (f *Formatter) Diff(md *Markdown) (string, error) {
 	if f.style == StyleNone {
 		return "", nil
@@ -144,7 +141,7 @@ func (f *Formatter) Diff(md *Markdown) (string, error) {
 		b.Bytes(), md.name+" (formatted)",
 	)
 
-	return string(d.ToCombinedFormat()), ErrNotFormatted
+	return string(d.ToCombinedFormat()), nil
 }
 
 func String(key string, fm map[string]any) string {
