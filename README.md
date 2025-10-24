@@ -20,6 +20,12 @@ Arguments may be:
 go install git.iscode.ca/msantos/mgd/cmd/mgd@latest
 ```
 
+## Source
+
+```
+CGO_ENABLED=0 go build -trimpath -ldflags "-w" ./cmd/mdg/
+```
+
 # EXAMPLES
 
 ```bash

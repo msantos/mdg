@@ -1,5 +1,4 @@
-// Package format formats a markdown document reproducibly and
-// consistently.
+// Package format consistently and reproducibly formats a markdown document.
 package format
 
 import (
