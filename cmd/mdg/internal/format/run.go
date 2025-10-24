@@ -124,16 +124,18 @@ func (o *Opt) format(r *fdpair.Opt) error {
 		return err
 	}
 
-	var buf bytes.Buffer
+	var formatted bytes.Buffer
 
-	if err := o.md.Format(bytes.NewBuffer(b), &buf); err != nil {
+	unformatted := bytes.NewBuffer(b)
+
+	if err := o.md.Format(unformatted, &formatted); err != nil {
 		return fmt.Errorf("%s: %w", r.Name(), err)
 	}
 
 	if o.diff {
 		d := gitdiff.CompareBytes(
-			b, r.Name(),
-			buf.Bytes(), fmt.Sprintf("%s (formatted)", r.Name()),
+			unformatted.Bytes(), r.Name(),
+			formatted.Bytes(), fmt.Sprintf("%s (formatted)", r.Name()),
 		)
 
 		fmt.Println(string(d.ToCombinedFormat()))
@@ -141,7 +143,7 @@ func (o *Opt) format(r *fdpair.Opt) error {
 		return nil
 	}
 
-	if !o.isChanged(b, buf.Bytes()) {
+	if !o.isChanged(formatted.Bytes(), unformatted.Bytes()) {
 		return nil
 	}
 
@@ -158,7 +160,7 @@ func (o *Opt) format(r *fdpair.Opt) error {
 		}
 	}()
 
-	if _, err := w.Write(buf.Bytes()); err != nil {
+	if _, err := w.Write(formatted.Bytes()); err != nil {
 		return fmt.Errorf("%s: %w", w.Name(), err)
 	}
 
