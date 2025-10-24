@@ -174,7 +174,9 @@ func (o *Opt) walkdir(file string, d fs.DirEntry, err error) error {
 		return nil
 	}
 
-	if filepath.Ext(file) != ".md" {
+	switch filepath.Ext(file) {
+	case ".md", ".markdown":
+	default:
 		return nil
 	}
 

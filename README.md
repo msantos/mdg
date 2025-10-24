@@ -12,7 +12,7 @@ Arguments may be:
 * `-`: read markdown from stdin (the default)
 * file: path to markdown file
 * directory: walk the specified path for any files ending with the
-  `.md` extension
+  `.md` or `.markdown` extensions
 
 # BUILDING
 
