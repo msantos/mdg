@@ -40,6 +40,7 @@ Format markdown documents.
 func Run() {
 	diff := flag.Bool("diff", false, "Display formatting changes as diff")
 	verbose := flag.Bool("verbose", false, "Enable debug messages")
+	noLineWrap := flag.Bool("no-linewrap", false, "Disable wrapping of long lines")
 
 	flag.Usage = func() { usage() }
 
@@ -51,7 +52,7 @@ func Run() {
 	}
 
 	o := &Opt{
-		md:        markdown.New(),
+		md:        markdown.New(markdown.WithLineWrap(!*noLineWrap)),
 		diff:      *diff,
 		verbose:   *verbose,
 		isChanged: func(_, _ []byte) bool { return true },

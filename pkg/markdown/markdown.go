@@ -38,9 +38,10 @@ func init() {
 
 type Opt struct {
 	goldmark.Markdown
-	f   *format.Formatter
-	css string
-	t   *template.Template
+	f        *format.Formatter
+	linewrap bool
+	css      string
+	t        *template.Template
 }
 
 type Option func(*Opt)
@@ -51,6 +52,13 @@ func WithCSS(s string) Option {
 		if s != "" {
 			o.css = s
 		}
+	}
+}
+
+// WithLineWrap enables or disables wrapping long lines.
+func WithLineWrap(t bool) Option {
+	return func(o *Opt) {
+		o.linewrap = t
 	}
 }
 
@@ -82,14 +90,16 @@ func New(opt ...Option) *Opt {
 				},
 			),
 		),
-		t:   templateHTML,
-		css: defaultCSS,
-		f:   format.New(format.WithStyle(format.StyleWrap)),
+		t:        templateHTML,
+		css:      defaultCSS,
+		linewrap: true,
 	}
 
 	for _, fn := range opt {
 		fn(o)
 	}
+
+	o.f = format.New(format.WithLineWrap(o.linewrap))
 
 	return o
 }

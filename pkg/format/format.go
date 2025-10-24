@@ -66,15 +66,15 @@ func (md *Markdown) WriteFrontMatter(w io.Writer) error {
 }
 
 type Formatter struct {
-	style Style
+	linewrap bool
 }
 
 type Option func(*Formatter)
 
-// WithStyle sets the method of formatting the document.
-func WithStyle(s Style) Option {
+// WithLineWrap enables or disables long line wrapping.
+func WithLineWrap(t bool) Option {
 	return func(f *Formatter) {
-		f.style = s
+		f.linewrap = t
 	}
 }
 
@@ -92,17 +92,12 @@ func New(opt ...Option) *Formatter {
 // Format formats and writes a parsed markdown document to the provided
 // writer.
 func (f *Formatter) Format(w io.Writer, md *Markdown) error {
-	if f.style == StyleNone {
-		_, err := w.Write(md.source)
-		return err
-	}
-
 	if err := md.WriteFrontMatter(w); err != nil {
 		return err
 	}
 
 	renderer := markdown.NewRenderer()
-	if f.style == StyleWrap {
+	if f.linewrap {
 		renderer.AddMarkdownOptions(markdown.WithSoftWraps())
 	}
 
@@ -122,10 +117,6 @@ func (f *Formatter) Format(w io.Writer, md *Markdown) error {
 // is unformatted, Diff returns the differences. Otherwise diff will be an
 // empty string.
 func (f *Formatter) Diff(md *Markdown) (string, error) {
-	if f.style == StyleNone {
-		return "", nil
-	}
-
 	b := bytes.Buffer{}
 
 	if err := f.Format(&b, md); err != nil {

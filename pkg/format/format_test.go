@@ -84,13 +84,7 @@ func TestFormatMarkdown(t *testing.T) {
 		return
 	}
 
-	style, err := format.FromString("wrap")
-	if err != nil {
-		t.Errorf("%v", err)
-		return
-	}
-
-	f := format.New(format.WithStyle(style))
+	f := format.New(format.WithLineWrap(true))
 
 	b := &bytes.Buffer{}
 
@@ -112,13 +106,7 @@ func TestFormatMarkdownFrontmatter(t *testing.T) {
 		return
 	}
 
-	style, err := format.FromString("wrap")
-	if err != nil {
-		t.Errorf("%v", err)
-		return
-	}
-
-	f := format.New(format.WithStyle(style))
+	f := format.New(format.WithLineWrap(true))
 
 	b := &bytes.Buffer{}
 
@@ -140,7 +128,7 @@ func TestDiffMarkdown(t *testing.T) {
 		return
 	}
 
-	f := format.New(format.WithStyle(format.StyleWrap))
+	f := format.New(format.WithLineWrap(true))
 
 	diff, err := f.Diff(md)
 	if err != nil {
@@ -161,7 +149,7 @@ func TestNoDiffMarkdown(t *testing.T) {
 		return
 	}
 
-	f := format.New(format.WithStyle(format.StyleWrap))
+	f := format.New(format.WithLineWrap(true))
 
 	diff, err := f.Diff(md)
 	if err != nil {
