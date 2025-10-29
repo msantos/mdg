@@ -12,9 +12,9 @@ import (
 	"path/filepath"
 	"strings"
 
-	"git.iscode.ca/msantos/mdg/internal/pkg/fdpair"
-	"git.iscode.ca/msantos/mdg/pkg/config"
-	"git.iscode.ca/msantos/mdg/pkg/markdown"
+	"codeberg.org/msantos/mdg/internal/pkg/fdpair"
+	"codeberg.org/msantos/mdg/pkg/config"
+	"codeberg.org/msantos/mdg/pkg/markdown"
 
 	"github.com/bwplotka/mdox/pkg/gitdiff"
 )
