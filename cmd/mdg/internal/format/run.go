@@ -68,7 +68,10 @@ func Run() {
 
 func (o *Opt) run(dir string) error {
 	if dir == "-" {
-		return o.format(fdpair.New())
+		return o.format(&stdio{
+			r:   os.Stdin,
+			Opt: o,
+		})
 	}
 
 	o.isChanged = func(in, out []byte) bool {
@@ -78,49 +81,8 @@ func (o *Opt) run(dir string) error {
 	return filepath.WalkDir(dir, o.walkdir)
 }
 
-func (o *Opt) openOutput(r *os.File) (*os.File, error) {
-	if o.verbose {
-		fmt.Fprintln(os.Stderr, "Formatting:", r.Name())
-	}
-
-	w, err := os.CreateTemp(filepath.Dir(r.Name()), filepath.Base(r.Name()))
-	if err != nil {
-		return nil, fmt.Errorf("%s: %w", r.Name(), err)
-	}
-
-	return w, nil
-}
-
-func (o *Opt) closeOutput(r, w *os.File) error {
-	err := w.Sync()
-	if err != nil {
-		return fmt.Errorf("%s: %w", w.Name(), err)
-	}
-
-	defer func() {
-		if err == nil {
-			return
-		}
-
-		if err := os.Remove(w.Name()); err != nil {
-			fmt.Fprintln(os.Stderr, w.Name(), err)
-		}
-	}()
-
-	err = os.Rename(w.Name(), r.Name())
-	if err != nil {
-		return fmt.Errorf("%s: %w", w.Name(), err)
-	}
-
-	if err := w.Close(); err != nil {
-		fmt.Fprintln(os.Stderr, w.Name(), err)
-	}
-
-	return nil
-}
-
-func (o *Opt) format(r *fdpair.Opt) error {
-	b, err := io.ReadAll(r)
+func (o *Opt) format(rw fdpair.FD) error {
+	b, err := io.ReadAll(rw.In())
 	if err != nil {
 		return err
 	}
@@ -129,14 +91,20 @@ func (o *Opt) format(r *fdpair.Opt) error {
 
 	unformatted := bytes.NewBuffer(b)
 
+	var in string
+
+	if f, ok := rw.In().(*os.File); ok {
+		in = f.Name()
+	}
+
 	if err := o.md.Format(unformatted, &formatted); err != nil {
-		return fmt.Errorf("%s: %w", r.Name(), err)
+		return fmt.Errorf("%s: %w", in, err)
 	}
 
 	if o.diff {
 		d := gitdiff.CompareBytes(
-			unformatted.Bytes(), r.Name(),
-			formatted.Bytes(), fmt.Sprintf("%s (formatted)", r.Name()),
+			unformatted.Bytes(), in,
+			formatted.Bytes(), fmt.Sprintf("%s (formatted)", in),
 		)
 
 		fmt.Println(string(d.ToCombinedFormat()))
@@ -148,21 +116,26 @@ func (o *Opt) format(r *fdpair.Opt) error {
 		return nil
 	}
 
-	w, err := r.OpenOutput(r.File)
-	if err != nil {
-		return fmt.Errorf("%s: %w", r.Name(), err)
+	if err := rw.Open(); err != nil {
+		return fmt.Errorf("%s: %w", in, err)
+	}
+
+	var out string
+
+	if f, ok := rw.Out().(*os.File); ok {
+		out = f.Name()
 	}
 
 	defer func() {
-		if rerr := r.CloseOutput(r.File, w); rerr != nil {
+		if rerr := rw.Close(); rerr != nil {
 			if err == nil {
-				err = fmt.Errorf("%s: %w", w.Name(), rerr)
+				err = fmt.Errorf("%s: %w", out, rerr)
 			}
 		}
 	}()
 
-	if _, err := w.Write(formatted.Bytes()); err != nil {
-		return fmt.Errorf("%s: %w", w.Name(), err)
+	if _, err := rw.Out().Write(formatted.Bytes()); err != nil {
+		return fmt.Errorf("%s: %w", out, err)
 	}
 
 	return nil
@@ -198,15 +171,96 @@ func (o *Opt) walkdir(file string, d fs.DirEntry, err error) error {
 		}
 	}()
 
-	fd := fdpair.New()
+	rw := &fsobj{
+		r:   r,
+		Opt: o,
+	}
 
-	fd.File = r
-	fd.OpenOutput = o.openOutput
-	fd.CloseOutput = o.closeOutput
-
-	if err := o.format(fd); err != nil {
+	if err := o.format(rw); err != nil {
 		return fmt.Errorf("%s: %w", file, err)
 	}
 
 	return nil
+}
+
+type stdio struct {
+	*Opt
+
+	r *os.File
+	w *os.File
+}
+
+func (rw *stdio) Open() error {
+	rw.w = os.Stdout
+	return nil
+}
+
+func (rw *stdio) Close() error {
+	return nil
+}
+
+func (rw *stdio) In() io.Reader {
+	return rw.r
+}
+
+func (rw *stdio) Out() io.Writer {
+	return rw.w
+}
+
+type fsobj struct {
+	*Opt
+
+	r *os.File
+	w *os.File
+}
+
+func (rw *fsobj) Open() error {
+	if rw.verbose {
+		fmt.Fprintln(os.Stderr, "Formatting:", rw.r.Name())
+	}
+
+	w, err := os.CreateTemp(filepath.Dir(rw.r.Name()), filepath.Base(rw.r.Name()))
+	if err != nil {
+		return fmt.Errorf("%s: %w", rw.r.Name(), err)
+	}
+
+	rw.w = w
+
+	return nil
+}
+
+func (rw *fsobj) Close() error {
+	err := rw.w.Sync()
+	if err != nil {
+		return fmt.Errorf("%s: %w", rw.w.Name(), err)
+	}
+
+	defer func() {
+		if err == nil {
+			return
+		}
+
+		if err := os.Remove(rw.w.Name()); err != nil {
+			fmt.Fprintln(os.Stderr, rw.w.Name(), err)
+		}
+	}()
+
+	err = os.Rename(rw.w.Name(), rw.r.Name())
+	if err != nil {
+		return fmt.Errorf("%s: %w", rw.w.Name(), err)
+	}
+
+	if err := rw.w.Close(); err != nil {
+		fmt.Fprintln(os.Stderr, rw.w.Name(), err)
+	}
+
+	return nil
+}
+
+func (rw *fsobj) In() io.Reader {
+	return rw.r
+}
+
+func (rw *fsobj) Out() io.Writer {
+	return rw.w
 }

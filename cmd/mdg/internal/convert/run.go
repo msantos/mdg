@@ -5,6 +5,7 @@ import (
 	"errors"
 	"flag"
 	"fmt"
+	"io"
 	"io/fs"
 	"os"
 	"path"
@@ -93,33 +94,48 @@ func (o *Opt) run(dir string) error {
 	if dir == "-" {
 		o.check = "disable"
 
-		return o.convert(fdpair.New())
+		return o.convert(&stdio{
+			r:   os.Stdin,
+			Opt: o,
+		})
 	}
 
 	return filepath.WalkDir(dir, o.walkdir)
 }
 
-func (o *Opt) convert(r *fdpair.Opt) error {
-	w, err := r.OpenOutput(r.File)
+func (o *Opt) convert(rw fdpair.FD) error {
+	var in string
+
+	if f, ok := rw.In().(*os.File); ok {
+		in = f.Name()
+	}
+
+	err := rw.Open()
 
 	switch {
 	case err == nil:
 	case errors.Is(err, ErrSkipMD):
 		return nil
 	default:
-		return fmt.Errorf("%s: %w", r.Name(), err)
+		return fmt.Errorf("%s: %w", in, err)
+	}
+
+	var out string
+
+	if f, ok := rw.Out().(*os.File); ok {
+		out = f.Name()
 	}
 
 	defer func() {
-		if rerr := r.CloseOutput(r.File, w); rerr != nil {
+		if rerr := rw.Close(); rerr != nil {
 			if err == nil {
-				err = fmt.Errorf("%s: %w", w.Name(), rerr)
+				err = fmt.Errorf("%s: %w", out, rerr)
 			}
 		}
 	}()
 
-	if err := o.md.Convert(r, w); err != nil {
-		return fmt.Errorf("%s: %w", w.Name(), err)
+	if err := o.md.Convert(rw.In(), rw.Out()); err != nil {
+		return fmt.Errorf("%s: %w", out, err)
 	}
 
 	return nil
@@ -148,31 +164,6 @@ func (o *Opt) compare(md, html string) bool {
 	return stmd.ModTime().After(sthtml.ModTime())
 }
 
-var ErrSkipMD = errors.New("skip markdown file")
-
-func (o *Opt) openOutput(r *os.File) (*os.File, error) {
-	html := strings.TrimSuffix(r.Name(), filepath.Ext(r.Name())) + ".html"
-
-	if !o.compare(r.Name(), html) {
-		return nil, ErrSkipMD
-	}
-
-	if o.verbose {
-		fmt.Fprintln(os.Stderr, "Converting:", r.Name(), " -> ", html)
-	}
-
-	w, err := os.OpenFile(html, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0644)
-	if err != nil {
-		return nil, fmt.Errorf("%s: %w", html, err)
-	}
-
-	return w, nil
-}
-
-func (o *Opt) closeOutput(_, w *os.File) error {
-	return w.Close()
-}
-
 func (o *Opt) walkdir(file string, d fs.DirEntry, err error) error {
 	if err != nil {
 		return err
@@ -197,15 +188,80 @@ func (o *Opt) walkdir(file string, d fs.DirEntry, err error) error {
 		return fmt.Errorf("%s: %w", file, err)
 	}
 
-	fd := fdpair.New()
+	rw := &fsobj{
+		r:   r,
+		Opt: o,
+	}
 
-	fd.File = r
-	fd.OpenOutput = o.openOutput
-	fd.CloseOutput = o.closeOutput
-
-	if err := o.convert(fd); err != nil {
+	if err := o.convert(rw); err != nil {
 		return fmt.Errorf("%s: %w", file, err)
 	}
 
 	return nil
+}
+
+type stdio struct {
+	*Opt
+
+	r *os.File
+	w *os.File
+}
+
+func (rw *stdio) Open() error {
+	rw.w = os.Stdout
+	return nil
+}
+
+func (rw *stdio) Close() error {
+	return nil
+}
+
+func (rw *stdio) In() io.Reader {
+	return rw.r
+}
+
+func (rw *stdio) Out() io.Writer {
+	return rw.w
+}
+
+type fsobj struct {
+	*Opt
+
+	r *os.File
+	w *os.File
+}
+
+var ErrSkipMD = errors.New("skip markdown file")
+
+func (rw *fsobj) Open() error {
+	html := strings.TrimSuffix(rw.r.Name(), filepath.Ext(rw.r.Name())) + ".html"
+
+	if !rw.compare(rw.r.Name(), html) {
+		return ErrSkipMD
+	}
+
+	if rw.verbose {
+		fmt.Fprintln(os.Stderr, "Converting:", rw.r.Name(), " -> ", html)
+	}
+
+	w, err := os.OpenFile(html, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0644)
+	if err != nil {
+		return fmt.Errorf("%s: %w", html, err)
+	}
+
+	rw.w = w
+
+	return nil
+}
+
+func (rw *fsobj) Close() error {
+	return rw.w.Close()
+}
+
+func (rw *fsobj) In() io.Reader {
+	return rw.r
+}
+
+func (rw *fsobj) Out() io.Writer {
+	return rw.w
 }
