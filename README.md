@@ -28,15 +28,47 @@ CGO_ENABLED=0 go build -trimpath -ldflags "-w" ./cmd/mdg/
 
 # EXAMPLES
 
-```bash
-# current directory
+## fmt
+
+* format markdown input from stdin and output formatted markdown
+
+```
+mdg fmt
+```
+
+* format in place markdown files
+
+```
+mdg fmt test1.md doc/test2.md
+```
+
+* format in place markdown files ending with .md or .markdown in the current
+  directory
+
+```
+mdg fmt .
+```
+
+## convert
+
+* convert markdown input from stdin and output HTML
+
+```
 mdg convert
+```
 
-# any markdown in the $HOME/docs directory
-mdg convert ~/docs
+* convert markdown files ending in .md or .markdown to HTML in the current
+  directory
 
-# format from stdin
-mdg fmt -
+```
+mdg convert .
+```
+
+* convert markdown files ending in .md or .markdown to HTML in $HOME/docs
+  directory and current working directory
+
+```
+mdg convert ~/docs .
 ```
 
 # ENVIRONMENT VARIABLES
