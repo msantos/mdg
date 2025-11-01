@@ -3,6 +3,7 @@ package format
 import (
 	"bytes"
 	_ "embed"
+	"errors"
 	"flag"
 	"fmt"
 	"io"
@@ -127,11 +128,7 @@ func (o *Opt) format(rw fdpair.FD) error {
 	}
 
 	defer func() {
-		if rerr := rw.Close(); rerr != nil {
-			if err == nil {
-				err = fmt.Errorf("%s: %w", out, rerr)
-			}
-		}
+		err = errors.Join(err, rw.Close())
 	}()
 
 	if _, err := rw.Out().Write(formatted.Bytes()); err != nil {
@@ -166,9 +163,7 @@ func (o *Opt) walkdir(file string, d fs.DirEntry, err error) error {
 	}
 
 	defer func() {
-		if err := r.Close(); err != nil {
-			fmt.Fprintln(os.Stderr, r.Name(), err)
-		}
+		err = errors.Join(err, r.Close())
 	}()
 
 	rw := &fsobj{
@@ -236,13 +231,7 @@ func (rw *fsobj) Close() error {
 	}
 
 	defer func() {
-		if err == nil {
-			return
-		}
-
-		if err := os.Remove(rw.w.Name()); err != nil {
-			fmt.Fprintln(os.Stderr, rw.w.Name(), err)
-		}
+		err = errors.Join(err, os.Remove(rw.w.Name()))
 	}()
 
 	err = os.Rename(rw.w.Name(), rw.r.Name())
@@ -251,7 +240,7 @@ func (rw *fsobj) Close() error {
 	}
 
 	if err := rw.w.Close(); err != nil {
-		fmt.Fprintln(os.Stderr, rw.w.Name(), err)
+		return fmt.Errorf("%s: %w", rw.w.Name(), err)
 	}
 
 	return nil
