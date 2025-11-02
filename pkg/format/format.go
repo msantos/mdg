@@ -4,6 +4,7 @@ package format
 import (
 	"bytes"
 	"io"
+	"os"
 	"strings"
 
 	"github.com/Kunde21/markdownfmt/v2/markdown"
@@ -22,10 +23,16 @@ type Markdown struct {
 }
 
 // Parse returns the frontmatter and markdown content.
-func Parse(name string, r io.Reader) (*Markdown, error) {
+func Parse(r io.Reader) (*Markdown, error) {
 	source, err := io.ReadAll(r)
 	if err != nil {
 		return nil, err
+	}
+
+	name := ""
+
+	if f, ok := r.(*os.File); ok {
+		name = f.Name()
 	}
 
 	md := &Markdown{

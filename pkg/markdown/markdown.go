@@ -127,7 +127,7 @@ func metadata(key string, fm map[string]any, def string) string {
 }
 
 func (o *Opt) Convert(r io.Reader, w io.Writer) error {
-	md, err := format.Parse("", r)
+	md, err := format.Parse(r)
 	if err != nil {
 		return err
 	}
@@ -154,7 +154,7 @@ func (o *Opt) Convert(r io.Reader, w io.Writer) error {
 }
 
 func (o *Opt) Format(r io.Reader, w io.Writer) error {
-	md, err := format.Parse("", r)
+	md, err := format.Parse(r)
 	if err != nil {
 		return err
 	}

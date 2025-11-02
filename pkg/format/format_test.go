@@ -78,7 +78,7 @@ option
 )
 
 func TestFormatMarkdown(t *testing.T) {
-	md, err := format.Parse("test", bytes.NewBufferString(mdUnformatted))
+	md, err := format.Parse(bytes.NewBufferString(mdUnformatted))
 	if err != nil {
 		t.Errorf("%v", err)
 		return
@@ -100,7 +100,7 @@ func TestFormatMarkdown(t *testing.T) {
 }
 
 func TestFormatMarkdownFrontmatter(t *testing.T) {
-	md, err := format.Parse("test", bytes.NewBufferString(mdFrontMatterUnformatted))
+	md, err := format.Parse(bytes.NewBufferString(mdFrontMatterUnformatted))
 	if err != nil {
 		t.Errorf("%v", err)
 		return
@@ -122,7 +122,7 @@ func TestFormatMarkdownFrontmatter(t *testing.T) {
 }
 
 func TestDiffMarkdown(t *testing.T) {
-	md, err := format.Parse("test", bytes.NewBufferString(mdFrontMatterUnformatted))
+	md, err := format.Parse(bytes.NewBufferString(mdFrontMatterUnformatted))
 	if err != nil {
 		t.Errorf("%v", err)
 		return
@@ -143,7 +143,7 @@ func TestDiffMarkdown(t *testing.T) {
 }
 
 func TestNoDiffMarkdown(t *testing.T) {
-	md, err := format.Parse("test", bytes.NewBufferString(mdFrontMatterFormatted))
+	md, err := format.Parse(bytes.NewBufferString(mdFrontMatterFormatted))
 	if err != nil {
 		t.Errorf("%v", err)
 		return
