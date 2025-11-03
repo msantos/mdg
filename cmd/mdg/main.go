@@ -6,9 +6,9 @@ import (
 	"os"
 	"path"
 
-	"codeberg.org/msantos/mdg/cmd/mdg/internal/convert"
-	"codeberg.org/msantos/mdg/cmd/mdg/internal/format"
-	"codeberg.org/msantos/mdg/pkg/config"
+	"go.iscode.ca/mdg/cmd/mdg/internal/convert"
+	"go.iscode.ca/mdg/cmd/mdg/internal/format"
+	"go.iscode.ca/mdg/pkg/config"
 )
 
 var f = flag.NewFlagSet(os.Args[0], flag.ExitOnError)

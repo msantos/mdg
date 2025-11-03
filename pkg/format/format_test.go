@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"testing"
 
-	"codeberg.org/msantos/mdg/pkg/format"
+	"go.iscode.ca/mdg/pkg/format"
 )
 
 const (

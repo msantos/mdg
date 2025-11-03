@@ -6,8 +6,8 @@ import (
 	"io"
 	"text/template"
 
-	"codeberg.org/msantos/mdg/pkg/config"
-	"codeberg.org/msantos/mdg/pkg/format"
+	"go.iscode.ca/mdg/pkg/config"
+	"go.iscode.ca/mdg/pkg/format"
 	d2 "github.com/FurqanSoftware/goldmark-d2"
 	"github.com/yuin/goldmark"
 	highlighting "github.com/yuin/goldmark-highlighting/v2"

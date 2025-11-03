@@ -13,9 +13,9 @@ import (
 	"strings"
 	"text/template"
 
-	"codeberg.org/msantos/mdg/internal/pkg/fdpair"
-	"codeberg.org/msantos/mdg/pkg/config"
-	"codeberg.org/msantos/mdg/pkg/markdown"
+	"go.iscode.ca/mdg/internal/pkg/fdpair"
+	"go.iscode.ca/mdg/pkg/config"
+	"go.iscode.ca/mdg/pkg/markdown"
 )
 
 type Opt struct {

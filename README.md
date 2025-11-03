@@ -17,7 +17,7 @@ Arguments may be:
 # BUILDING
 
 ```
-go install codeberg.org/msantos/mdg@latest
+go install go.iscode.ca/mdg@latest
 ```
 
 ## Source

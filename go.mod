@@ -1,4 +1,4 @@
-module codeberg.org/msantos/mdg
+module go.iscode.ca/mdg
 
 go 1.24.4
 
