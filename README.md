@@ -1,3 +1,5 @@
+[![Go Reference](https://pkg.go.dev/badge/go.iscode.ca/mdg.svg)](https://pkg.go.dev/go.iscode.ca/mdg)
+
 # SYNOPSIS
 
 mdg [*options*] [fmt|convert] [-|*directory*|*file*] [...]
