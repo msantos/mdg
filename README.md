@@ -18,13 +18,13 @@ Arguments may be:
 
 # BUILDING
 
-```
+```bash
 go install go.iscode.ca/mdg/cmd/mdg@latest
 ```
 
 ## Source
 
-```
+```bash
 CGO_ENABLED=0 go build -trimpath -ldflags "-w" ./cmd/mdg/
 ```
 
@@ -34,20 +34,20 @@ CGO_ENABLED=0 go build -trimpath -ldflags "-w" ./cmd/mdg/
 
 * format markdown input from stdin and output formatted markdown
 
-```
+```bash
 mdg fmt
 ```
 
 * format in place markdown files
 
-```
+```bash
 mdg fmt test1.md doc/test2.md
 ```
 
 * format in place markdown files ending with .md or .markdown in the current
   directory
 
-```
+```bash
 mdg fmt .
 ```
 
@@ -55,21 +55,21 @@ mdg fmt .
 
 * convert markdown input from stdin and output HTML
 
-```
+```bash
 mdg convert
 ```
 
 * convert markdown files ending in .md or .markdown to HTML in the current
   directory
 
-```
+```bash
 mdg convert .
 ```
 
 * convert markdown files ending in .md or .markdown to HTML in $HOME/docs
   directory and current working directory
 
-```
+```bash
 mdg convert ~/docs .
 ```
 
@@ -84,6 +84,11 @@ None.
 Convert markdown documents to HTML.
 
 ### OPTIONS
+
+check *newer|disable*
+: behaviour when overwriting an existing .html file (default: newer)
+* newer: overwrite .html file if .md file timestamp is newer
+* disable: disable check, always overwrite .html
 
 css *string*
 : CSS file
