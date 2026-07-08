@@ -10,7 +10,7 @@ import (
 )
 
 // https://github.com/bwplotka/mdox/blob/818772c6517630714db8b132cb94f25f72a38850/pkg/mdformatter/mdformatter.go
-func FormatFrontMatter(m map[string]interface{}) ([]byte, error) {
+func FormatFrontMatter(m map[string]any) ([]byte, error) {
 	if len(m) == 0 {
 		return nil, nil
 	}
@@ -39,11 +39,11 @@ func FormatFrontMatter(m map[string]interface{}) ([]byte, error) {
 var _ yaml.Marshaler = sortedFrontMatter{}
 
 type sortedFrontMatter struct {
-	m    map[string]interface{}
+	m    map[string]any
 	keys []string
 }
 
-func (f sortedFrontMatter) MarshalYAML() (interface{}, error) {
+func (f sortedFrontMatter) MarshalYAML() (any, error) {
 	n := &yaml.Node{
 		Kind: yaml.MappingNode,
 	}

@@ -151,7 +151,7 @@ func String(key string, fm map[string]any) string {
 	switch v := val.(type) {
 	case string:
 		return v
-	case []interface{}:
+	case []any:
 		a := make([]string, 0, len(v))
 		for _, x := range v {
 			a = append(a, x.(string))
@@ -168,7 +168,7 @@ func Map(key string, fm map[string]any) map[string]string {
 		return nil
 	}
 
-	mi, ok := val.(map[string]interface{})
+	mi, ok := val.(map[string]any)
 	if !ok {
 		return nil
 	}
