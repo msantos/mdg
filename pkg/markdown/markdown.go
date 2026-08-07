@@ -6,8 +6,6 @@ import (
 	"io"
 	"text/template"
 
-	"go.iscode.ca/mdg/pkg/config"
-	"go.iscode.ca/mdg/pkg/format"
 	d2 "github.com/FurqanSoftware/goldmark-d2"
 	"github.com/yuin/goldmark"
 	highlighting "github.com/yuin/goldmark-highlighting/v2"
@@ -17,6 +15,8 @@ import (
 	"go.abhg.dev/goldmark/anchor"
 	mermaid "go.abhg.dev/goldmark/mermaid"
 	"go.abhg.dev/goldmark/toc"
+	"go.iscode.ca/mdg/pkg/config"
+	"go.iscode.ca/mdg/pkg/format"
 	"oss.terrastruct.com/d2/d2layouts/d2elklayout"
 	"oss.terrastruct.com/d2/d2themes/d2themescatalog"
 )
