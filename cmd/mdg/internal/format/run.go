@@ -163,7 +163,7 @@ func (o *Opt) walkdir(file string, d fs.DirEntry, err error) error {
 	}
 
 	defer func() {
-		err = errors.Join(err, r.Close())
+		_ = r.Close()
 	}()
 
 	rw := &fsobj{

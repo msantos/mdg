@@ -187,6 +187,10 @@ func (o *Opt) walkdir(file string, d fs.DirEntry, err error) error {
 		return fmt.Errorf("%s: %w", file, err)
 	}
 
+	defer func() {
+		_ = r.Close()
+	}()
+
 	rw := &fsobj{
 		r:   r,
 		Opt: o,
