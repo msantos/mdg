@@ -3,7 +3,6 @@ package format
 import (
 	"bytes"
 	_ "embed"
-	"errors"
 	"flag"
 	"fmt"
 	"io"
@@ -128,7 +127,7 @@ func (o *Opt) format(rw fdpair.FD) error {
 	}
 
 	defer func() {
-		err = errors.Join(err, rw.Close())
+		_ = rw.Close()
 	}()
 
 	if _, err := rw.Out().Write(formatted.Bytes()); err != nil {
