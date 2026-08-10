@@ -31,7 +31,7 @@ func (rw *fsobj) Open() error {
 }
 
 func (rw *fsobj) Close() (err error) {
-	err := rw.w.Sync()
+	err = rw.w.Sync()
 	if err != nil {
 		return fmt.Errorf("%s: %w", rw.w.Name(), err)
 	}
