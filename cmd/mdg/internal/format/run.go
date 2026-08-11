@@ -116,6 +116,10 @@ func (o *Opt) format(rw fdpair.FD) error {
 		return nil
 	}
 
+	if o.verbose {
+		fmt.Fprintln(os.Stderr, "Formatting:", in)
+	}
+
 	if err := rw.Open(); err != nil {
 		return fmt.Errorf("%s: %w", in, err)
 	}

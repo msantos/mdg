@@ -25,10 +25,6 @@ func (rw *fsobj) Open() error {
 		return ErrSkipMD
 	}
 
-	if rw.verbose {
-		fmt.Fprintln(os.Stderr, "Converting:", rw.r.Name(), " -> ", html)
-	}
-
 	w, err := os.OpenFile(html, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0644)
 	if err != nil {
 		return fmt.Errorf("%s: %w", html, err)

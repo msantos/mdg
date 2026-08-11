@@ -16,10 +16,6 @@ type fsobj struct {
 }
 
 func (rw *fsobj) Open() error {
-	if rw.verbose {
-		fmt.Fprintln(os.Stderr, "Formatting:", rw.r.Name())
-	}
-
 	w, err := os.CreateTemp(filepath.Dir(rw.r.Name()), filepath.Base(rw.r.Name()))
 	if err != nil {
 		return fmt.Errorf("%s: %w", rw.r.Name(), err)

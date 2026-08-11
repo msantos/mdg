@@ -125,6 +125,10 @@ func (o *Opt) convert(rw fdpair.FD) error {
 		out = f.Name()
 	}
 
+	if o.verbose {
+		fmt.Fprintln(os.Stderr, "Converting:", in, " -> ", out)
+	}
+
 	defer func() {
 		if rerr := rw.Close(); rerr != nil {
 			if err == nil {
