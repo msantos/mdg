@@ -69,8 +69,7 @@ func Run() {
 func (o *Opt) run(dir string) error {
 	if dir == "-" {
 		return o.format(&stdio{
-			r:   os.Stdin,
-			Opt: o,
+			r: os.Stdin,
 		})
 	}
 
@@ -170,8 +169,7 @@ func (o *Opt) walkdir(file string, d fs.DirEntry, err error) error {
 	}()
 
 	rw := &fsobj{
-		r:   r,
-		Opt: o,
+		r: r,
 	}
 
 	if err := o.format(rw); err != nil {

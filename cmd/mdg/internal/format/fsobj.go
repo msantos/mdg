@@ -9,8 +9,6 @@ import (
 )
 
 type fsobj struct {
-	*Opt
-
 	r *os.File
 	w *os.File
 }
