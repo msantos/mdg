@@ -14,7 +14,7 @@ require (
 	go.abhg.dev/goldmark/mermaid v0.6.0
 	go.abhg.dev/goldmark/toc v0.12.0
 	gopkg.in/yaml.v3 v3.0.1
-	oss.terrastruct.com/d2 v0.7.1
+	oss.terrastruct.com/d2 v0.7.2
 )
 
 require (
@@ -28,8 +28,9 @@ require (
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/clbanning/mxj/v2 v2.7.0 // indirect
 	github.com/clipperhouse/uax29/v2 v2.7.0 // indirect
-	github.com/dlclark/regexp2/v2 v2.5.2 // indirect
+	github.com/dlclark/regexp2/v2 v2.6.0 // indirect
 	github.com/dop251/goja v0.0.0-20260806115107-493f22071ef6 // indirect
+	github.com/fsnotify/fsnotify v1.10.1 // indirect
 	github.com/go-sourcemap/sourcemap v2.1.4+incompatible // indirect
 	github.com/gobwas/glob v0.2.3 // indirect
 	github.com/goccy/go-yaml v1.19.2 // indirect
@@ -48,13 +49,14 @@ require (
 	github.com/spf13/afero v1.15.0 // indirect
 	github.com/spf13/cast v1.10.0 // indirect
 	github.com/tdewolff/parse/v2 v2.8.15 // indirect
-	golang.org/x/exp v0.0.0-20260727155853-b88d891fe743 // indirect
-	golang.org/x/image v0.44.0 // indirect
+	golang.org/x/exp v0.0.0-20260811152304-ee035b5b010f // indirect
+	golang.org/x/image v0.45.0 // indirect
 	golang.org/x/net v0.57.0 // indirect
 	golang.org/x/sys v0.47.0 // indirect
-	golang.org/x/text v0.40.0 // indirect
+	golang.org/x/text v0.41.0 // indirect
 	golang.org/x/xerrors v0.0.0-20240903120638-7835f813f4da // indirect
 	google.golang.org/protobuf v1.36.11 // indirect
+	gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
-	oss.terrastruct.com/util-go v0.0.0-20260803172852-41b080f8db2a // indirect
+	oss.terrastruct.com/util-go v0.1.0 // indirect
 )
