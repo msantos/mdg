@@ -7,6 +7,7 @@ import (
 	"text/template"
 
 	d2 "github.com/FurqanSoftware/goldmark-d2"
+	"github.com/d2lang/d2/d2themes/d2themescatalog"
 	"github.com/yuin/goldmark"
 	highlighting "github.com/yuin/goldmark-highlighting/v2"
 	meta "github.com/yuin/goldmark-meta"
@@ -17,8 +18,6 @@ import (
 	"go.abhg.dev/goldmark/toc"
 	"go.iscode.ca/mdg/pkg/config"
 	"go.iscode.ca/mdg/pkg/format"
-	"oss.terrastruct.com/d2/d2layouts/d2elklayout"
-	"oss.terrastruct.com/d2/d2themes/d2themescatalog"
 )
 
 //go:embed default_tmpl.html
@@ -85,7 +84,7 @@ func New(opt ...Option) *Opt {
 				&toc.Extender{},
 				&anchor.Extender{},
 				&d2.Extender{
-					Layout:  d2elklayout.DefaultLayout,
+					//Layout:  d2elklayout.DefaultLayout,
 					ThemeID: &d2themescatalog.TerminalGrayscale.ID,
 				},
 			),

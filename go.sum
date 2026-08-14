@@ -216,6 +216,10 @@ github.com/coreos/pkg v0.0.0-20180928190104-399ea9e2e55f/go.mod h1:E3G3o1h8I7cfc
 github.com/cpuguy83/go-md2man v1.0.10/go.mod h1:SmD6nW6nTyfqj6ABTjUi3V3JVMnlJmwcJI5acqYI6dE=
 github.com/cpuguy83/go-md2man/v2 v2.0.0-20190314233015-f79a8a8ca69d/go.mod h1:maD7wRr/U5Z6m/iR4s+kqSMx2CaBsrgA7czyZG/E6dU=
 github.com/creack/pty v1.1.7/go.mod h1:lj5s0c3V2DBrqTV7llrYr5NG6My20zk30Fl46Y7DoTY=
+github.com/d2lang/d2 v0.8.1 h1:J6USpaLRlgOK88kG0XR2RESnGjfIYS9/XaHW5Trwlw0=
+github.com/d2lang/d2 v0.8.1/go.mod h1:Waji8LozGEfzPAF6rnvlteqRs0CxrPU3BRgH/leL3q8=
+github.com/d2lang/util-go v0.2.0 h1:X9+F4j2S0453cG3EpA5bm9KBEV4ZAanxH+5ELA2yPDk=
+github.com/d2lang/util-go v0.2.0/go.mod h1:9t8cKlmsQw6UlChU4HQE9tZr8efjKIGDHkDdDYUeJy0=
 github.com/daaku/go.zipexe v1.0.0/go.mod h1:z8IiR6TsVLEYKwXAoE/I+8ys/sDkgTzSL0CLnGVd57E=
 github.com/danwakefield/fnmatch v0.0.0-20160403171240-cbb64ac3d964/go.mod h1:Xd9hchkHSWYkEqJwUGisez3G1QY8Ryz0sdWrLPMGjLk=
 github.com/davecgh/go-spew v0.0.0-20161028175848-04cdfd42973b/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
@@ -1155,8 +1159,8 @@ honnef.co/go/tools v0.0.0-20190523083050-ea95bdfd59fc/go.mod h1:rf3lG4BRIbNafJWh
 honnef.co/go/tools v0.0.1-2019.2.3/go.mod h1:a3bituU0lyd329TUQxRnasdCoJDkEUEAqEt0JzvZhAg=
 honnef.co/go/tools v0.0.1-2020.1.3/go.mod h1:X/FiERA/W4tHapMX5mGpAtMSVEeEUOyHaw9vFzvIQ3k=
 honnef.co/go/tools v0.0.1-2020.1.4/go.mod h1:X/FiERA/W4tHapMX5mGpAtMSVEeEUOyHaw9vFzvIQ3k=
-oss.terrastruct.com/d2 v0.7.2 h1:E8Hhv+xOqTBj0831OiK7hmGLZEC3OKtFtm5rZN1425Y=
-oss.terrastruct.com/d2 v0.7.2/go.mod h1:GQEDseVmgxcoS3BlUlFD4FqGlc2vixzjNccsu+cF/UA=
+oss.terrastruct.com/d2 v0.7.1 h1:LafTW1UoXJGODvKDZ8obyBfGcc2k2vHZ3EzrabMqEVE=
+oss.terrastruct.com/d2 v0.7.1/go.mod h1:aT0PwLaxBZGgsWrIT8oSFYm5xoYX08BaOHewi5qLE2E=
 oss.terrastruct.com/util-go v0.1.0 h1:ftCXhVAWfFirTiFaX87fcGrJl/dFc8zTF12BgZJRUds=
 oss.terrastruct.com/util-go v0.1.0/go.mod h1:ikW/S92XF/xqgaQTgeid+T0gGqFNLeohCbfDa2VwG8Q=
 pack.ag/amqp v0.8.0/go.mod h1:4/cbmt4EJXSKlG6LCfWHoqmN0uFdy5i/+YFz+fTfhV4=
