@@ -6,7 +6,6 @@ require (
 	github.com/FurqanSoftware/goldmark-d2 v0.0.0-20250906161746-6305edf4a24a
 	github.com/Kunde21/markdownfmt/v2 v2.1.1-0.20210810103848-727f02f4c51c
 	github.com/bwplotka/mdox v0.9.0
-	github.com/d2lang/d2 v0.8.1
 	github.com/gohugoio/hugo v0.164.0
 	github.com/yuin/goldmark v1.8.5
 	github.com/yuin/goldmark-highlighting/v2 v2.0.0-20230729083705-37449abec8cc
@@ -15,6 +14,7 @@ require (
 	go.abhg.dev/goldmark/mermaid v0.6.0
 	go.abhg.dev/goldmark/toc v0.12.0
 	gopkg.in/yaml.v3 v3.0.1
+	oss.terrastruct.com/d2 v0.7.2
 )
 
 require (
@@ -28,7 +28,6 @@ require (
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/clbanning/mxj/v2 v2.7.0 // indirect
 	github.com/clipperhouse/uax29/v2 v2.7.0 // indirect
-	github.com/d2lang/util-go v0.2.0 // indirect
 	github.com/dlclark/regexp2/v2 v2.6.0 // indirect
 	github.com/dop251/goja v0.0.0-20260806115107-493f22071ef6 // indirect
 	github.com/fsnotify/fsnotify v1.10.1 // indirect
@@ -59,6 +58,5 @@ require (
 	google.golang.org/protobuf v1.36.11 // indirect
 	gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
-	oss.terrastruct.com/d2 v0.7.1 // indirect
 	oss.terrastruct.com/util-go v0.1.0 // indirect
 )
